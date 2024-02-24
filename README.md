@@ -1,2 +1,3 @@
 # eth-denver-2024
-ETHDenver2024 
+
+ETHDenver2024 Hackathon
