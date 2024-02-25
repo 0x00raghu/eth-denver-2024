@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { StarIcon } from "@heroicons/react/24/solid";
+import { StarIcon, CurrencyDollarIcon } from "@heroicons/react/24/solid";
+import { Button, ButtonGroup } from "@chakra-ui/react";
 
 interface DataType {
   heading: string;
@@ -35,7 +36,7 @@ const postData: DataType[] = [
     rating: 4.7,
   },
   {
-    heading: "Design banner",
+    heading: "Design Project",
     heading2: "with Figma",
     name: "Colt stelle",
     imgSrc: "/images/courses/coursethree.png",
@@ -76,7 +77,7 @@ const postData: DataType[] = [
   },
 ];
 
-const Banner = () => {
+const Project = () => {
   return (
     <>
       <div className="mx-auto max-w-7xl sm:py-8 px-4 lg:px-8 ">
@@ -144,31 +145,20 @@ const Banner = () => {
 
                   <hr style={{ color: "#C4C4C4" }} />
 
-                  <div className="flex justify-between pt-6">
-                    <div className="flex gap-4">
-                      <Image
-                        src={"/images/courses/book-open.svg"}
-                        alt="users"
-                        width={24}
-                        height={24}
-                        className="inline-block m-auto"
-                      />
-                      <h3 className="text-base font-medium text-black opacity-75">
-                        {items.classes} classes
-                      </h3>
-                    </div>
-                    <div className="flex gap-4">
-                      <Image
-                        src={"/images/courses/users.svg"}
-                        alt="users"
-                        width={24}
-                        height={24}
-                        className="inline-block m-auto"
-                      />
-                      <h3 className="text-base font-medium text-black opacity-75">
-                        {items.students} students
-                      </h3>
-                    </div>
+                  <div className="flex justify-between pt-6 w-full max-w-7xl">
+                    <Button
+                      leftIcon={
+                        <CurrencyDollarIcon
+                          className="h-6 w-6"
+                          aria-hidden="true"
+                        />
+                      }
+                      colorScheme="pink"
+                      variant="solid"
+                      width={"inherit"}
+                    >
+                      Donate USDC
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -180,4 +170,4 @@ const Banner = () => {
   );
 };
 
-export default Banner;
+export default Project;
