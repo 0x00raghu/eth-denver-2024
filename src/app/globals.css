@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -24,6 +26,10 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+.shadow-courses {
+  box-shadow: 0px 40px 20px rgba(0, 0, 0, 0.15);
 }
 
 @layer utilities {
