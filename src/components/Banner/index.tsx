@@ -17,7 +17,7 @@ const Banner = () => {
               triggerOnce={true}
             >
               <h1 className="text-4xl lg:text-7xl font-semibold mb-5 text-lightgrey md:4px lg:text-start text-center">
-                Empower projects <br /> by connecting
+                Empower community <br /> by contributing
               </h1>
             </Fade>
             <Fade
@@ -57,7 +57,7 @@ const Banner = () => {
               </p>
             </div>
             <Image
-              src="/images/Banner/crypto.png"
+              src="/images/banner/crypto.png"
               alt="nothing"
               width={1000}
               height={805}
