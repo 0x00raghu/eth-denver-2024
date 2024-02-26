@@ -1,9 +1,9 @@
-"use client";
-import Slider from "react-slick";
-import React, { Component } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { StarIcon } from "@heroicons/react/24/solid";
+'use client';
+import Slider from 'react-slick';
+import React, { Component } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { StarIcon } from '@heroicons/react/24/solid';
 
 // CAROUSEL DATA
 
@@ -20,60 +20,60 @@ interface DataType {
 
 const postData: DataType[] = [
   {
-    heading: "Full stack modern",
-    heading2: "javascript",
-    name: "Colt stelle",
-    imgSrc: "/images/courses/courseone.png",
+    heading: 'Full stack modern',
+    heading2: 'javascript',
+    name: 'Colt stelle',
+    imgSrc: '/images/_courses/courseone.png',
     students: 150,
     classes: 12,
     price: 20,
     rating: 4.7,
   },
   {
-    heading: "Design system",
-    heading2: "with React programme",
-    name: "Colt stelle",
-    imgSrc: "/images/courses/coursetwo.png",
+    heading: 'Design system',
+    heading2: 'with React programme',
+    name: 'Colt stelle',
+    imgSrc: '/images/_courses/coursetwo.png',
     students: 130,
     classes: 12,
     price: 20,
     rating: 4.7,
   },
   {
-    heading: "Design banner",
-    heading2: "with Figma",
-    name: "Colt stelle",
-    imgSrc: "/images/courses/coursethree.png",
+    heading: 'Design banner',
+    heading2: 'with Figma',
+    name: 'Colt stelle',
+    imgSrc: '/images/_courses/coursethree.png',
     students: 120,
     classes: 12,
     price: 20,
     rating: 4.7,
   },
   {
-    heading: "We Launch Delia",
-    heading2: "Webflow this Week!",
-    name: "Colt stelle",
-    imgSrc: "/images/courses/courseone.png",
+    heading: 'We Launch Delia',
+    heading2: 'Webflow this Week!',
+    name: 'Colt stelle',
+    imgSrc: '/images/_courses/courseone.png',
     students: 150,
     classes: 12,
     price: 20,
     rating: 4.7,
   },
   {
-    heading: "We Launch Delia",
-    heading2: "Webflow this Week!",
-    name: "Colt stelle",
-    imgSrc: "/images/courses/coursetwo.png",
+    heading: 'We Launch Delia',
+    heading2: 'Webflow this Week!',
+    name: 'Colt stelle',
+    imgSrc: '/images/_courses/coursetwo.png',
     students: 150,
     classes: 12,
     price: 20,
     rating: 4.7,
   },
   {
-    heading: "We Launch Delia",
-    heading2: "Webflow this Week!",
-    name: "Colt stelle",
-    imgSrc: "/images/courses/coursethree.png",
+    heading: 'We Launch Delia',
+    heading2: 'Webflow this Week!',
+    name: 'Colt stelle',
+    imgSrc: '/images/_courses/coursethree.png',
     students: 150,
     classes: 12,
     price: 20,
@@ -93,7 +93,7 @@ export default class MultipleItems extends Component {
       arrows: false,
       autoplay: false,
       speed: 500,
-      cssEase: "linear",
+      cssEase: 'linear',
       responsive: [
         {
           breakpoint: 1200,
@@ -129,13 +129,8 @@ export default class MultipleItems extends Component {
       <div id="courses">
         <div className="mx-auto max-w-7xl sm:py-8 px-4 lg:px-8 ">
           <div className="sm:flex justify-between items-center">
-            <h3 className="text-midnightblue text-4xl lg:text-55xl font-semibold mb-5 sm:mb-0">
-              Popular courses.
-            </h3>
-            <Link
-              href={"/"}
-              className="text-Blueviolet text-lg font-medium space-links"
-            >
+            <h3 className="text-midnightblue text-4xl lg:text-55xl font-semibold mb-5 sm:mb-0">Popular courses.</h3>
+            <Link href={'/'} className="text-Blueviolet text-lg font-medium space-links">
               Explore courses&nbsp;&gt;&nbsp;
             </Link>
           </div>
@@ -145,13 +140,7 @@ export default class MultipleItems extends Component {
               <div key={i}>
                 <div className="bg-white m-3 px-3 pt-3 pb-12 my-20 shadow-courses rounded-2xl">
                   <div className="relative rounded-3xl">
-                    <Image
-                      src={items.imgSrc}
-                      alt="gaby"
-                      width={389}
-                      height={262}
-                      className="m-auto clipPath"
-                    />
+                    <Image src={items.imgSrc} alt="gaby" width={389} height={262} className="m-auto clipPath" />
                     <div className="absolute right-5 -bottom-2 bg-ultramarine rounded-full p-6">
                       <h3 className="text-white uppercase text-center text-sm font-medium">
                         best <br /> seller
@@ -160,24 +149,16 @@ export default class MultipleItems extends Component {
                   </div>
 
                   <div className="px-3">
-                    <h4 className="text-2xl font-bold pt-6 text-black">
-                      {items.heading}
-                    </h4>
-                    <h4 className="text-2xl font-bold pt-1 text-black">
-                      {items.heading2}
-                    </h4>
+                    <h4 className="text-2xl font-bold pt-6 text-black">{items.heading}</h4>
+                    <h4 className="text-2xl font-bold pt-1 text-black">{items.heading2}</h4>
 
                     <div>
-                      <h3 className="text-base font-normal pt-6 opacity-75">
-                        {items.name}
-                      </h3>
+                      <h3 className="text-base font-normal pt-6 opacity-75">{items.name}</h3>
                     </div>
 
                     <div className="flex justify-between items-center py-6">
                       <div className="flex gap-4">
-                        <h3 className="text-red text-22xl font-medium">
-                          {items.rating}
-                        </h3>
+                        <h3 className="text-red text-22xl font-medium">{items.rating}</h3>
                         <div className="flex">
                           <StarIcon className="h-5 w-5 text-gold" />
                           <StarIcon className="h-5 w-5 text-gold" />
@@ -191,32 +172,16 @@ export default class MultipleItems extends Component {
                       </div>
                     </div>
 
-                    <hr style={{ color: "#C4C4C4" }} />
+                    <hr style={{ color: '#C4C4C4' }} />
 
                     <div className="flex justify-between pt-6">
                       <div className="flex gap-4">
-                        <Image
-                          src={"/images/courses/book-open.svg"}
-                          alt="users"
-                          width={24}
-                          height={24}
-                          className="inline-block m-auto"
-                        />
-                        <h3 className="text-base font-medium text-black opacity-75">
-                          {items.classes} classes
-                        </h3>
+                        <Image src={'/images/_courses/book-open.svg'} alt="users" width={24} height={24} className="inline-block m-auto" />
+                        <h3 className="text-base font-medium text-black opacity-75">{items.classes} classes</h3>
                       </div>
                       <div className="flex gap-4">
-                        <Image
-                          src={"/images/courses/users.svg"}
-                          alt="users"
-                          width={24}
-                          height={24}
-                          className="inline-block m-auto"
-                        />
-                        <h3 className="text-base font-medium text-black opacity-75">
-                          {items.students} students
-                        </h3>
+                        <Image src={'/images/_courses/users.svg'} alt="users" width={24} height={24} className="inline-block m-auto" />
+                        <h3 className="text-base font-medium text-black opacity-75">{items.students} students</h3>
                       </div>
                     </div>
                   </div>
