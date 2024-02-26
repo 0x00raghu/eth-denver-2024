@@ -1,6 +1,6 @@
-import Features from "@/components/Work/index";
-import Banner from "@/components/Banner/index";
-import Courses from "@/components/Projects/index";
+import Features from "@/components/_work/index";
+import Banner from "@/components/_banner/index";
+import Courses from "@/components/_projects/index";
 
 export default function Home() {
   return (
