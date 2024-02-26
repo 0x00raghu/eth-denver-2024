@@ -9,6 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@alchemy/aa-accounts": "^3.1.1",
+    "@alchemy/aa-alchemy": "^3.1.1",
+    "@alchemy/aa-core": "^3.1.1",
+    "@alchemy/aa-signers": "^3.1.1",
     "@chakra-ui/next-js": "^2.2.0",
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.3",
@@ -21,7 +25,8 @@
     "react-awesome-reveal": "^4.2.8",
     "react-dom": "^18",
     "react-slick": "^0.30.2",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "viem": "^2.7.14"
   },
   "devDependencies": {
     "@types/node": "^20",

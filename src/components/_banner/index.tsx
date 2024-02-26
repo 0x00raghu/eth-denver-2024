@@ -57,7 +57,7 @@ const Banner = () => {
               </p>
             </div>
             <Image
-              src="/images/banner/crypto.png"
+              src="/images/_banner/crypto.png"
               alt="nothing"
               width={1000}
               height={805}

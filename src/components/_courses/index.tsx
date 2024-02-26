@@ -23,7 +23,7 @@ const postData: DataType[] = [
     heading: "Full stack modern",
     heading2: "javascript",
     name: "Colt stelle",
-    imgSrc: "/images/courses/courseone.png",
+    imgSrc: "/images/_courses/courseone.png",
     students: 150,
     classes: 12,
     price: 20,
@@ -33,7 +33,7 @@ const postData: DataType[] = [
     heading: "Design system",
     heading2: "with React programme",
     name: "Colt stelle",
-    imgSrc: "/images/courses/coursetwo.png",
+    imgSrc: "/images/_courses/coursetwo.png",
     students: 130,
     classes: 12,
     price: 20,
@@ -43,7 +43,7 @@ const postData: DataType[] = [
     heading: "Design banner",
     heading2: "with Figma",
     name: "Colt stelle",
-    imgSrc: "/images/courses/coursethree.png",
+    imgSrc: "/images/_courses/coursethree.png",
     students: 120,
     classes: 12,
     price: 20,
@@ -53,7 +53,7 @@ const postData: DataType[] = [
     heading: "We Launch Delia",
     heading2: "Webflow this Week!",
     name: "Colt stelle",
-    imgSrc: "/images/courses/courseone.png",
+    imgSrc: "/images/_courses/courseone.png",
     students: 150,
     classes: 12,
     price: 20,
@@ -63,7 +63,7 @@ const postData: DataType[] = [
     heading: "We Launch Delia",
     heading2: "Webflow this Week!",
     name: "Colt stelle",
-    imgSrc: "/images/courses/coursetwo.png",
+    imgSrc: "/images/_courses/coursetwo.png",
     students: 150,
     classes: 12,
     price: 20,
@@ -73,7 +73,7 @@ const postData: DataType[] = [
     heading: "We Launch Delia",
     heading2: "Webflow this Week!",
     name: "Colt stelle",
-    imgSrc: "/images/courses/coursethree.png",
+    imgSrc: "/images/_courses/coursethree.png",
     students: 150,
     classes: 12,
     price: 20,
@@ -196,7 +196,7 @@ export default class MultipleItems extends Component {
                     <div className="flex justify-between pt-6">
                       <div className="flex gap-4">
                         <Image
-                          src={"/images/courses/book-open.svg"}
+                          src={"/images/_courses/book-open.svg"}
                           alt="users"
                           width={24}
                           height={24}
@@ -208,7 +208,7 @@ export default class MultipleItems extends Component {
                       </div>
                       <div className="flex gap-4">
                         <Image
-                          src={"/images/courses/users.svg"}
+                          src={"/images/_courses/users.svg"}
                           alt="users"
                           width={24}
                           height={24}
