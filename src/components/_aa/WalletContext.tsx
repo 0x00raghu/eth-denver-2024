@@ -53,11 +53,12 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   };
 
   const transferAmount = async (toAddress: string, amount: string) => {
+    console.log(toAddress, amount);
     if (!provider) {
       throw new Error('Provider not initialized. Please connect wallet first.');
     }
 
-    const { hash: uoHash } = await provider.connectWallet({
+    const { hash: uoHash } = await provider.sendUserOperation({
       uo: {
         target: toAddress,
         data: '0x',

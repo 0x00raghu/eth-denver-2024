@@ -5,7 +5,6 @@ import React from 'react';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import Drawer from './Drawer';
 import Drawerdata from './Drawerdata';
-import Signindialog from './Signindialog';
 import Image from 'next/image';
 import { useWallet } from '@/components/_aa/WalletContext';
 
@@ -16,7 +15,7 @@ interface NavigationItem {
 }
 
 const navigation: NavigationItem[] = [
-  { name: 'Home', href: '/home', current: false },
+  { name: 'Profile', href: '/profile', current: false },
   { name: 'About us', href: '#about-section', current: false },
   { name: 'Projects', href: '/projects', current: false },
 ];
@@ -73,10 +72,7 @@ const Navbar = () => {
                 {/* <button className='flex justify-end text-xl font-medium bg-bgpink text-pink py-4 px-4 lg:px-8 navbutton rounded-full hover:text-black'>Sign in</button> */}
                 {/* <Signindialog /> */}
                 {isAuthenticated ? (
-                  <button
-                    onClick={connectWallet}
-                    className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
-                  >
+                  <button className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink">
                     {address}
                   </button>
                 ) : (
