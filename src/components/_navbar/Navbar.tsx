@@ -1,3 +1,4 @@
+'use client';
 import { Disclosure } from '@headlessui/react';
 import Link from 'next/link';
 import React from 'react';
@@ -6,6 +7,7 @@ import Drawer from './Drawer';
 import Drawerdata from './Drawerdata';
 import Signindialog from './Signindialog';
 import Image from 'next/image';
+import { useWallet } from '@/components/_aa/WalletContext';
 
 interface NavigationItem {
   name: string;
@@ -24,6 +26,7 @@ function classNames(...classes: string[]) {
 }
 
 const Navbar = () => {
+  const { isAuthenticated, address, connectWallet } = useWallet();
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
@@ -68,19 +71,28 @@ const Navbar = () => {
               </div>
               <div className="gap-6 hidden lg:flex">
                 {/* <button className='flex justify-end text-xl font-medium bg-bgpink text-pink py-4 px-4 lg:px-8 navbutton rounded-full hover:text-black'>Sign in</button> */}
-                <Signindialog />
+                {/* <Signindialog /> */}
+                {isAuthenticated ? (
+                  <button
+                    onClick={connectWallet}
+                    className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+                  >
+                    {address}
+                  </button>
+                ) : (
+                  <button
+                    onClick={connectWallet}
+                    className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+                  >
+                    Connect Wallet
+                  </button>
+                )}
               </div>
             </div>
-
-            {/* DRAWER FOR MOBILE VIEW */}
-
-            {/* DRAWER ICON */}
 
             <div className="block lg:hidden">
               <Bars3Icon className="block h-6 w-6" aria-hidden="true" onClick={() => setIsOpen(true)} />
             </div>
-
-            {/* DRAWER LINKS DATA */}
 
             <Drawer isOpen={isOpen} setIsOpen={setIsOpen}>
               <Drawerdata />
