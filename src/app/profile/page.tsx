@@ -38,7 +38,7 @@ const Home = () => {
               Build skills with our courses and mentor from world-class companies.
             </h3>
 
-            <DynamicReactTable data={data} />
+            {tokenBalances && tokenBalances.length > 0 && <DynamicReactTable data={tokenBalances} />}
 
             <div className="relative text-white focus-within:text-white flex flex-row-reverse input-shadow rounded-full pt-5 lg:pt-0">
               <button

@@ -24,13 +24,6 @@ const DynamicReactTable = ({ data }: any) => {
             </Tr>
           ))}
         </Tbody>
-        <Tfoot>
-          <Tr>
-            {Object.keys(data[0]).map((key) => (
-              <Th key={key}>{key}</Th>
-            ))}
-          </Tr>
-        </Tfoot>
       </Table>
     </TableContainer>
   );

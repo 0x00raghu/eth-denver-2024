@@ -6,6 +6,7 @@ import { createWalletClient, custom, Transport, parseEther } from 'viem';
 import { baseSepolia, WalletClientSigner } from '@alchemy/aa-core';
 import { Alchemy, Network } from 'alchemy-sdk';
 import web3 from 'web3';
+import _ from 'lodash';
 
 interface WalletContextType {
   provider: any; // Adjust the type according to your provider type
@@ -13,7 +14,7 @@ interface WalletContextType {
   isAuthenticated: boolean;
   connectWallet: () => Promise<void>;
   transferAmount: (toAddress: string, amount: string) => Promise<void>;
-  getWalletBalances: () => Promise<void>;
+  getWalletBalances: () => Promise<any>;
   tokenBalances: any[];
 }
 
@@ -33,6 +34,7 @@ interface WalletProviderProps {
 
 export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [provider, setProvider] = useState<any>(null);
+  const [alchemyClient, setAlchemyClient] = useState<any>(null);
   const [address, setAddress] = useState<string>('');
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [tokenBalances, setTokenBalances] = useState<any>([]);
@@ -50,12 +52,16 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       network: Network.BASE_SEPOLIA,
       apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
     });
+    setAlchemyClient(alchemy);
 
     const alchemyProvider = (
       await createModularAccountAlchemyClient({
         apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || '',
         chain,
         signer: eoaSigner,
+        gasManagerConfig: {
+          policyId: '7ae5ae77-cc13-413f-8ed0-da340340821d',
+        },
       })
     ).extend(alchemyEnhancedApiActions(alchemy));
 
@@ -73,7 +79,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     const target = toAddress as `0x${string}`;
     console.log(value, target);
 
-    const { hash: uoHash } = await provider.sendUserOperation({
+    const result = await provider.sendUserOperation({
       uo: {
         target,
         data: '0x',
@@ -81,21 +87,39 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       },
     });
 
-    console.log('UserOperation Hash: ', uoHash);
+    console.log('UserOperation Hash: ', result);
 
-    const txHash = await provider.waitForUserOperationTransaction({
-      hash: uoHash,
-    });
+    const txHash = await provider.waitForUserOperationTransaction(result.hash);
 
     console.log('Transaction Hash: ', txHash);
     return txHash;
   };
 
+  const getTokenMetaData = async (tokenAddress: string) => {
+    const tokenMetaData = await alchemyClient?.core?.getTokenMetadata(tokenAddress);
+    console.log(tokenMetaData, 'tokenMetaData');
+    return tokenMetaData;
+  };
+
   const getWalletBalances = async () => {
-    const _tokenBalances = await provider?.core?.getTokenBalances(address);
-    console.log(_tokenBalances, '_tokenBalances');
-    setTokenBalances(_tokenBalances?.tokenBalances);
-    return _tokenBalances?.tokenBalances;
+    const _tokenBalances = await alchemyClient?.core?.getTokenBalances(address);
+    // const _tokenBalances2 = await alchemyClient?.core?.getTokensForOwner(address);
+    // console.log(_tokenBalances2, 'tokenBalances');
+
+    const promises = await _tokenBalances?.tokenBalances.map(async (item: any) => {
+      const metaData = await getTokenMetaData(item.contractAddress);
+      if (metaData) {
+        const amount = item.tokenBalance / Math.pow(10, metaData.decimals);
+        item.amount = amount.toFixed(2);
+        delete item.tokenBalance;
+        item.viewURL = `https://sepolia.basescan.org/address/${address}#tokentxns`;
+      }
+      return { ...item, ...metaData };
+    });
+
+    const tokenBalancesNew = await Promise.all(promises);
+    setTokenBalances(tokenBalancesNew);
+    return tokenBalancesNew;
   };
 
   return (
