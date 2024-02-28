@@ -1,64 +1,78 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.24;
+pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./FundAProjectContributor.sol";
 
 contract FundAProject {
     address payable public owner;
-    uint public goal;
-    uint public raisedAmount;
+    FundAProjectContributor public fundAProjectContributor;
+
     IERC20 public usdcToken;
-    
-    mapping(address => uint) public contributors;
 
-    constructor(uint _goal, address _usdcAddress) {
+    struct Project {
+        string name;
+        uint256 usdcBalance;
+        uint256 ethBalance;
+        address owner;
+        string gitUrl;
+        // write remaining properties
+    }
+
+    Project[] public projects;
+
+    constructor(address _usdcAddress, address nftAddress) {
         owner = payable(msg.sender);
-        goal = _goal;
         usdcToken = IERC20(_usdcAddress);
+        fundAProjectContributor = FundAProjectContributor(nftAddress);
     }
 
-    function contribute(uint _amount) public {
+    function createProject(string calldata _name, string calldata _gitUrl)
+        public
+        returns (bool)
+    {
+        projects.push(Project(_name, 0, 0, msg.sender, _gitUrl));
+
+        return true;
+    }
+
+    function fundUSDC(uint256 _amount, uint256 projectNo) public {
         require(_amount > 0, "You need to contribute some USDC");
-        uint allowance = usdcToken.allowance(msg.sender, address(this));
+        uint256 allowance = usdcToken.allowance(msg.sender, address(this));
         require(_amount <= allowance, "Check the token allowance");
-
-        contributors[msg.sender] += _amount;
-        raisedAmount += _amount;
-
+        projects[projectNo].usdcBalance += _amount;
         usdcToken.transferFrom(msg.sender, address(this), _amount);
+
+        // award nft to msg.sender
+        fundAProjectContributor.awardNft(msg.sender);
     }
 
-    function contribute() public payable {
+    function fundEth(uint256 projectNo) public payable {
         require(msg.value > 0, "You need to send some Ether");
-        contributors[msg.sender] += msg.value;
-        raisedAmount += msg.value;
+        projects[projectNo].ethBalance += msg.value;
+        // awart nft to msg,sender
+        fundAProjectContributor.awardNft(msg.sender);
     }
 
-    function withdrawERC20() public {
-        require(raisedAmount >= goal, "Funding goal not met");
-        require(msg.sender == owner, "Only owner can withdraw funds");
+    function withdrawUSDC(uint256 projectNo) public {
+        require(
+            msg.sender == projects[projectNo].owner,
+            "Only Project owner can withdraw"
+        );
 
-        uint balance = usdcToken.balanceOf(address(this));
-        usdcToken.transfer(owner, balance);
+        usdcToken.transfer(msg.sender, projects[projectNo].usdcBalance);
     }
 
-    
+    function withdrawEth(uint256 projectNo) public {
+        require(
+            msg.sender == projects[projectNo].owner,
+            "Only Project owner can withdraw"
+        );
 
-    constructor(uint _goal) {
-        owner = payable(msg.sender);
-        goal = _goal;
+        payable(msg.sender).transfer(projects[projectNo].ethBalance);
     }
 
-    
-
-    function withdraw() public {
-        require(address(this).balance >= goal, "Funding goal not met");
-        require(msg.sender == owner, "Only owner can withdraw funds");
-
-        owner.transfer(address(this).balance);
-    }
-
-    function getBalance() public view returns (uint) {
+    function getBalance() public view returns (uint256) {
         return address(this).balance;
     }
 }
