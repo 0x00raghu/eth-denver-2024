@@ -2,9 +2,11 @@
 import Image from 'next/image';
 import { Fade } from 'react-awesome-reveal';
 import Link from 'next/link';
-import { createClient , sendUserOperation } from '../_aa/index';
+import { useWallet } from '@/components/_aa/WalletContext';
 
 const Banner = () => {
+  const { isAuthenticated, address, connectWallet } = useWallet();
+
   return (
     <div id="home-section " className="bg-lightpink">
       <div className="mx-auto max-w-7xl pt-20 sm:pb-24 px-6">
@@ -25,14 +27,22 @@ const Banner = () => {
                 <button className="text-xl w-full md:w-auto font-medium rounded-full text-white py-5 px-6 bg-pink lg:px-14 mr-6">
                   <Link href="#cook-section">Lets cook</Link>
                 </button>
-                <button
-                  onClick={() => {
-                    sendUserOperation();
-                  }}
-                  className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
-                >
-                  Connect Wallet
-                </button>
+
+                {isAuthenticated ? (
+                  <button
+                    onClick={connectWallet}
+                    className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+                  >
+                    {address}
+                  </button>
+                ) : (
+                  <button
+                    onClick={connectWallet}
+                    className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+                  >
+                    Connect Wallet
+                  </button>
+                )}
               </div>
             </Fade>
           </div>
