@@ -1,9 +1,11 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from 'react';
-import { createModularAccountAlchemyClient } from '@alchemy/aa-alchemy';
-import { createWalletClient, custom, Transport } from 'viem';
+import { createContext, useContext, useState } from 'react';
+import { createModularAccountAlchemyClient, alchemyEnhancedApiActions } from '@alchemy/aa-alchemy';
+import { createWalletClient, custom, Transport, parseEther } from 'viem';
 import { baseSepolia, WalletClientSigner } from '@alchemy/aa-core';
+import { Alchemy, Network } from 'alchemy-sdk';
+import web3 from 'web3';
 
 interface WalletContextType {
   provider: any; // Adjust the type according to your provider type
@@ -11,6 +13,8 @@ interface WalletContextType {
   isAuthenticated: boolean;
   connectWallet: () => Promise<void>;
   transferAmount: (toAddress: string, amount: string) => Promise<void>;
+  getWalletBalances: () => Promise<void>;
+  tokenBalances: any[];
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
@@ -29,23 +33,31 @@ interface WalletProviderProps {
 
 export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [provider, setProvider] = useState<any>(null);
-  const [address, setAddress] = useState<string | null>(null);
+  const [address, setAddress] = useState<string>('');
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [tokenBalances, setTokenBalances] = useState<any>([]);
 
   const connectWallet = async () => {
     const chain = baseSepolia;
-    const client = createWalletClient({
+    const client: any = createWalletClient({
       chain,
       transport: custom(window.ethereum as Transport),
     });
 
     const eoaSigner = new WalletClientSigner(client, 'json-rpc');
 
-    const alchemyProvider = await createModularAccountAlchemyClient({
-      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || '',
-      chain,
-      signer: eoaSigner,
+    const alchemy = new Alchemy({
+      network: Network.BASE_SEPOLIA,
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
     });
+
+    const alchemyProvider = (
+      await createModularAccountAlchemyClient({
+        apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || '',
+        chain,
+        signer: eoaSigner,
+      })
+    ).extend(alchemyEnhancedApiActions(alchemy));
 
     setProvider(alchemyProvider);
     setAddress(alchemyProvider.getAddress());
@@ -53,16 +65,19 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   };
 
   const transferAmount = async (toAddress: string, amount: string) => {
-    console.log(toAddress, amount);
     if (!provider) {
       throw new Error('Provider not initialized. Please connect wallet first.');
     }
 
+    const value = web3.utils.toWei(0.1, 'ether');
+    const target = toAddress as `0x${string}`;
+    console.log(value, target);
+
     const { hash: uoHash } = await provider.sendUserOperation({
       uo: {
-        target: toAddress,
+        target,
         data: '0x',
-        value: BigInt(amount),
+        value,
       },
     });
 
@@ -76,5 +91,16 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     return txHash;
   };
 
-  return <WalletContext.Provider value={{ provider, address, isAuthenticated, connectWallet, transferAmount }}>{children}</WalletContext.Provider>;
+  const getWalletBalances = async () => {
+    const _tokenBalances = await provider?.core?.getTokenBalances(address);
+    console.log(_tokenBalances, '_tokenBalances');
+    setTokenBalances(_tokenBalances?.tokenBalances);
+    return _tokenBalances?.tokenBalances;
+  };
+
+  return (
+    <WalletContext.Provider value={{ provider, address, isAuthenticated, connectWallet, transferAmount, getWalletBalances, tokenBalances }}>
+      {children}
+    </WalletContext.Provider>
+  );
 };

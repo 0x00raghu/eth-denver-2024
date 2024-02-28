@@ -1,13 +1,26 @@
 'use client';
 import Image from 'next/image';
 import { useWallet } from '@/components/_aa/WalletContext';
+import DynamicReactTable from '@/utils/table';
 
 const Home = () => {
-  const { address, transferAmount } = useWallet();
+  const { address, transferAmount, tokenBalances, getWalletBalances } = useWallet();
 
   const handleTransferAmount = async () => {
     if (address) await transferAmount('0x5B4d77e199FE8e5090009C72d2a5581C74FEbE89', '100000000000000000');
   };
+
+  const handleGetBalances = async () => {
+    const balances = await getWalletBalances();
+    console.log(tokenBalances, 'tokenBalances');
+    console.log(balances, 'balance');
+  };
+
+  const data = [
+    { ToConvert: 'inches', Into: 'millimetres (mm)', MultiplyBy: 25.4 },
+    { ToConvert: 'feet', Into: 'centimetres (cm)', MultiplyBy: 30.48 },
+    { ToConvert: 'yards', Into: 'metres (m)', MultiplyBy: 0.91444 },
+  ];
 
   return (
     <div id="home-section" className="bg-lightkblue">
@@ -25,7 +38,16 @@ const Home = () => {
               Build skills with our courses and mentor from world-class companies.
             </h3>
 
+            <DynamicReactTable data={data} />
+
             <div className="relative text-white focus-within:text-white flex flex-row-reverse input-shadow rounded-full pt-5 lg:pt-0">
+              <button
+                onClick={handleGetBalances}
+                className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+              >
+                Get Balances
+              </button>
+
               <button
                 onClick={handleTransferAmount}
                 className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
