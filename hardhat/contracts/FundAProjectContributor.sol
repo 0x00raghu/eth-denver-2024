@@ -12,7 +12,7 @@ contract FundAProjectContributor is ERC721 {
         owner = msg.sender;
     }
 
-    function setParentContract(address _fundAProjectAddress) public {
+    function setFundAProjectAddresst(address _fundAProjectAddress) public {
         require(msg.sender == owner, "only owner can set the address");
         fundAProjectAddress = _fundAProjectAddress;
     }

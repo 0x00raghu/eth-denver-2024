@@ -7,8 +7,13 @@ import "./FundAProjectContributor.sol";
 contract FundAProject {
     address payable public owner;
     FundAProjectContributor public fundAProjectContributor;
-
     IERC20 public usdcToken;
+
+    event ProjectCreated(string name, uint256 usdcBalance, uint256 ethBalance, address owner, string gitUrl);
+    event USDCFunded(uint256 amount, uint256 projectNo);
+    event EthFunded(uint256 amount, uint256 projectNo);
+    event USDCWithdrawn(uint256 amount, uint256 projectNo);
+    event EthWithdrawn(uint256 amount, uint256 projectNo);
 
     struct Project {
         string name;
@@ -32,7 +37,7 @@ contract FundAProject {
         returns (bool)
     {
         projects.push(Project(_name, 0, 0, msg.sender, _gitUrl));
-
+        emit ProjectCreated(_name, 0,0,msg.sender,gitUrl);
         return true;
     }
 
@@ -42,6 +47,7 @@ contract FundAProject {
         require(_amount <= allowance, "Check the token allowance");
         projects[projectNo].usdcBalance += _amount;
         usdcToken.transferFrom(msg.sender, address(this), _amount);
+        emit USDCFunded(_amount, projectNo);
 
         // award nft to msg.sender
         fundAProjectContributor.awardNft(msg.sender);
@@ -50,7 +56,9 @@ contract FundAProject {
     function fundEth(uint256 projectNo) public payable {
         require(msg.value > 0, "You need to send some Ether");
         projects[projectNo].ethBalance += msg.value;
-        // awart nft to msg,sender
+        emit EthFunded(msg.value, projectNo);
+
+        // award nft to msg.sender
         fundAProjectContributor.awardNft(msg.sender);
     }
 
@@ -61,6 +69,7 @@ contract FundAProject {
         );
 
         usdcToken.transfer(msg.sender, projects[projectNo].usdcBalance);
+        emit USDCWithdrawn(projects[projectNo].usdcBalance, projectNo);
     }
 
     function withdrawEth(uint256 projectNo) public {
@@ -70,6 +79,7 @@ contract FundAProject {
         );
 
         payable(msg.sender).transfer(projects[projectNo].ethBalance);
+        emit EthWithdrawn(projects[projectNo].ethBalance, projectNo);
     }
 
     function getBalance() public view returns (uint256) {
