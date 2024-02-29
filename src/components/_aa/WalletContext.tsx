@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { createModularAccountAlchemyClient, alchemyEnhancedApiActions } from '@alchemy/aa-alchemy';
 import { createWalletClient, custom, Transport, parseEther } from 'viem';
 import { baseSepolia, WalletClientSigner } from '@alchemy/aa-core';
@@ -43,7 +43,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     const chain = baseSepolia;
     const client: any = createWalletClient({
       chain,
-      transport: custom(window.ethereum as Transport),
+      transport: custom(window.ethereum),
     });
 
     const eoaSigner = new WalletClientSigner(client, 'json-rpc');
@@ -54,16 +54,14 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     });
     setAlchemyClient(alchemy);
 
-    const alchemyProvider = (
-      await createModularAccountAlchemyClient({
-        apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || '',
-        chain,
-        signer: eoaSigner,
-        gasManagerConfig: {
-          policyId: '7ae5ae77-cc13-413f-8ed0-da340340821d',
-        },
-      })
-    ).extend(alchemyEnhancedApiActions(alchemy));
+    const alchemyProvider = await createModularAccountAlchemyClient({
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || '',
+      chain,
+      signer: eoaSigner,
+      gasManagerConfig: {
+        policyId: '7ae5ae77-cc13-413f-8ed0-da340340821d',
+      },
+    });
 
     setProvider(alchemyProvider);
     setAddress(alchemyProvider.getAddress());
@@ -75,7 +73,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       throw new Error('Provider not initialized. Please connect wallet first.');
     }
 
-    const value = web3.utils.toWei(0.1, 'ether');
+    const value = parseEther('0.0001');
     const target = toAddress as `0x${string}`;
     console.log(value, target);
 
@@ -83,13 +81,15 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       uo: {
         target,
         data: '0x',
-        value,
+        // value: 1n,
       },
     });
 
     console.log('UserOperation Hash: ', result);
 
-    const txHash = await provider.waitForUserOperationTransaction(result.hash);
+    const txHash = await provider.waitForUserOperationTransaction({
+      hash: result.hash,
+    });
 
     console.log('Transaction Hash: ', txHash);
     return txHash;
@@ -121,6 +121,10 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     setTokenBalances(tokenBalancesNew);
     return tokenBalancesNew;
   };
+
+  useEffect(() => {
+    connectWallet();
+  }, []);
 
   return (
     <WalletContext.Provider value={{ provider, address, isAuthenticated, connectWallet, transferAmount, getWalletBalances, tokenBalances }}>
