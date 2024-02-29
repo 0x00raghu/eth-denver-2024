@@ -1,11 +1,10 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { createModularAccountAlchemyClient, alchemyEnhancedApiActions } from '@alchemy/aa-alchemy';
-import { createWalletClient, custom, Transport, parseEther } from 'viem';
+import { createModularAccountAlchemyClient } from '@alchemy/aa-alchemy';
+import { createWalletClient, custom, parseEther } from 'viem';
 import { baseSepolia, WalletClientSigner } from '@alchemy/aa-core';
 import { Alchemy, Network } from 'alchemy-sdk';
-import web3 from 'web3';
 import _ from 'lodash';
 
 interface WalletContextType {
@@ -18,6 +17,10 @@ interface WalletContextType {
   tokenBalances: any[];
 }
 
+interface WalletProviderProps {
+  children: React.ReactNode;
+}
+
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 export const useWallet = (): WalletContextType => {
@@ -28,10 +31,6 @@ export const useWallet = (): WalletContextType => {
   return context;
 };
 
-interface WalletProviderProps {
-  children: React.ReactNode;
-}
-
 export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [provider, setProvider] = useState<any>(null);
   const [alchemyClient, setAlchemyClient] = useState<any>(null);
@@ -40,6 +39,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [tokenBalances, setTokenBalances] = useState<any>([]);
 
   const connectWallet = async () => {
+    console.log('connectWallet: ', connectWallet);
     const chain = baseSepolia;
     const client: any = createWalletClient({
       chain,
@@ -63,6 +63,8 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       },
     });
 
+    // 0.996840926798627995
+
     setProvider(alchemyProvider);
     setAddress(alchemyProvider.getAddress());
     setIsAuthenticated(true);
@@ -81,7 +83,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       uo: {
         target,
         data: '0x',
-        // value: 1n,
+        value: BigInt("100000000000000000"),
       },
     });
 
@@ -103,8 +105,6 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
 
   const getWalletBalances = async () => {
     const _tokenBalances = await alchemyClient?.core?.getTokenBalances(address);
-    // const _tokenBalances2 = await alchemyClient?.core?.getTokensForOwner(address);
-    // console.log(_tokenBalances2, 'tokenBalances');
 
     const promises = await _tokenBalances?.tokenBalances.map(async (item: any) => {
       const metaData = await getTokenMetaData(item.contractAddress);
@@ -121,10 +121,6 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     setTokenBalances(tokenBalancesNew);
     return tokenBalancesNew;
   };
-
-  useEffect(() => {
-    connectWallet();
-  }, []);
 
   return (
     <WalletContext.Provider value={{ provider, address, isAuthenticated, connectWallet, transferAmount, getWalletBalances, tokenBalances }}>
