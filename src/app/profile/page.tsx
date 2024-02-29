@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { useWallet } from '@/components/_aa/WalletContext';
 import DynamicReactTable from '@/utils/table';
 import { createProject, fundUSDC, fundEth, withdrawUSDC, withdrawEth, getBalance } from '@/components/_aa/ContractFunctions'; // Import the additional contract functions
+import { ArrowDownIcon } from '@heroicons/react/24/solid';
+import { openTransak } from '@/components/_onramp/transak';
 
 const Home = () => {
   const { address, sendUserOperation, tokenBalances, getWalletBalances } = useWallet();
@@ -110,6 +112,17 @@ const Home = () => {
             className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
           >
             Get Balance
+          </button>
+
+          <button
+            type="button"
+            onClick={() => openTransak('BUY', '')}
+            className="flex border w-full md:w-auto mt-5 md:mt-0 bg-ultramarine justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-white hover:text-white hover:bg-pink"
+
+            // className="mr-7 inline-flex items-center rounded-md border border-transparent bg-gradient-to-r from-teal-500  to-teal-400 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm "
+          >
+            <ArrowDownIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
+            Buy Crypto
           </button>
         </div>
       </div>
