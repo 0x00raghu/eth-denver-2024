@@ -12,7 +12,7 @@ interface WalletContextType {
   address: string | null;
   isAuthenticated: boolean;
   connectWallet: () => Promise<void>;
-  transferAmount: (toAddress: string, amount: string) => Promise<void>;
+  sendUserOperation: (toAddress: string, data: string) => Promise<void>;
   getWalletBalances: () => Promise<any>;
   tokenBalances: any[];
 }
@@ -70,20 +70,17 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     setIsAuthenticated(true);
   };
 
-  const transferAmount = async (toAddress: string, amount: string) => {
+  const sendUserOperation = async (toAddress: string, data: string) => {
     if (!provider) {
       throw new Error('Provider not initialized. Please connect wallet first.');
     }
 
-    const value = parseEther('0.0001');
     const target = toAddress as `0x${string}`;
-    console.log(value, target);
 
     const result = await provider.sendUserOperation({
       uo: {
         target,
-        data: '0x',
-        value: BigInt("100000000000000000"),
+        data,
       },
     });
 
@@ -123,7 +120,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   };
 
   return (
-    <WalletContext.Provider value={{ provider, address, isAuthenticated, connectWallet, transferAmount, getWalletBalances, tokenBalances }}>
+    <WalletContext.Provider value={{ provider, address, isAuthenticated, connectWallet, sendUserOperation, getWalletBalances, tokenBalances }}>
       {children}
     </WalletContext.Provider>
   );

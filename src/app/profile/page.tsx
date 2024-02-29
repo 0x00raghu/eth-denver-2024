@@ -2,12 +2,13 @@
 import Image from 'next/image';
 import { useWallet } from '@/components/_aa/WalletContext';
 import DynamicReactTable from '@/utils/table';
+import { createProject, fundUSDC, fundEth, withdrawUSDC, withdrawEth, getBalance } from '@/components/_aa/ContractFunctions'; // Import the additional contract functions
 
 const Home = () => {
-  const { address, transferAmount, tokenBalances, getWalletBalances } = useWallet();
+  const { address, sendUserOperation, tokenBalances, getWalletBalances } = useWallet();
 
   const handleTransferAmount = async () => {
-    if (address) await transferAmount('0x5B4d77e199FE8e5090009C72d2a5581C74FEbE89', '100000000000000000');
+    if (address) await sendUserOperation('0x5B4d77e199FE8e5090009C72d2a5581C74FEbE89', '10000000000');
   };
 
   const handleGetBalances = async () => {
@@ -16,50 +17,100 @@ const Home = () => {
     console.log(balances, 'balance');
   };
 
-  const data = [
-    { ToConvert: 'inches', Into: 'millimetres (mm)', MultiplyBy: 25.4 },
-    { ToConvert: 'feet', Into: 'centimetres (cm)', MultiplyBy: 30.48 },
-    { ToConvert: 'yards', Into: 'metres (m)', MultiplyBy: 0.91444 },
-  ];
+  const handleCreateProject = async () => {
+    const { uoCallData, contractAddress } = await createProject('test1', 'https://github.com/vuejs/eslint-config-typescript');
+    await sendUserOperation(contractAddress, uoCallData);
+  };
+
+  const handleFundUSDC = async () => {
+    const { uoCallData, contractAddress } = await fundUSDC(1, 0);
+    await sendUserOperation(contractAddress, uoCallData);
+  };
+
+  // Function to handle funding Ethereum
+  const handleFundEth = async () => {
+    const { uoCallData, contractAddress } = await fundEth(1, 0); // Adjust arguments as needed
+    await sendUserOperation(contractAddress, uoCallData);
+  };
+
+  // Function to handle withdrawing USDC
+  const handleWithdrawUSDC = async () => {
+    const { uoCallData, contractAddress } = await withdrawUSDC(1, 0); // Adjust arguments as needed
+    await sendUserOperation(contractAddress, uoCallData);
+  };
+
+  // Function to handle withdrawing Ethereum
+  const handleWithdrawEth = async () => {
+    const { uoCallData, contractAddress } = await withdrawEth(0); // Adjust arguments as needed
+    await sendUserOperation(contractAddress, uoCallData);
+  };
+
+  // Function to handle getting balance
+  const handleGetBalance = async () => {
+    const { uoCallData, contractAddress } = await getBalance(); // Adjust arguments as needed
+    await sendUserOperation(contractAddress, uoCallData);
+  };
 
   return (
     <div id="home-section" className="bg-lightkblue">
       <div className="mx-auto max-w-7xl pt-20 sm:pb-24 px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 space-x-1">
-          <div className="col-span-6 flex flex-col justify-evenly">
-            <div className="flex gap-2 mx-auto lg:mx-0">
-              <Image src="/images/_banner/check.svg" alt="check-image" width={20} height={20} />
-              <h3 className="text-kellygreen text-sm font-semibold text-center lg:text-start">Get 30% off on first enroll</h3>
-            </div>
-            <h1 className="text-midnightblue text-4xl sm:text-5xl font-semibold text-center lg:text-start lh-120 pt-5 lg:pt-0">
-              Advance your engineering skills with us.
-            </h1>
-            <h3 className="text-charcoal text-lg font-normal text-center lg:text-start opacity-75 pt-5 lg:pt-0">
-              Build skills with our courses and mentor from world-class companies.
-            </h3>
+        {tokenBalances && tokenBalances.length > 0 && <DynamicReactTable data={tokenBalances} />}
 
-            {tokenBalances && tokenBalances.length > 0 && <DynamicReactTable data={tokenBalances} />}
+        <div className="relative text-white focus-within:text-white grid grid-cols-3 flex-row gap-x-2 input-shadow rounded-full pt-5 space-y-3  max-w-7xl">
+          <button
+            onClick={handleGetBalances}
+            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+          >
+            Get Balances
+          </button>
 
-            <div className="relative text-white focus-within:text-white flex flex-row-reverse input-shadow rounded-full pt-5 lg:pt-0">
-              <button
-                onClick={handleGetBalances}
-                className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
-              >
-                Get Balances
-              </button>
+          <button
+            onClick={handleTransferAmount}
+            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+          >
+            Transfer
+          </button>
 
-              <button
-                onClick={handleTransferAmount}
-                className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
-              >
-                Transfer
-              </button>
-            </div>
-          </div>
+          <button
+            onClick={handleCreateProject}
+            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+          >
+            Create Project
+          </button>
 
-          <div className="col-span-6 flex justify-center">
-            <Image src="/images/_banner/mahila.png" alt="nothing" width={1000} height={805} />
-          </div>
+          <button
+            onClick={handleFundUSDC}
+            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+          >
+            Fund USDC
+          </button>
+          <button
+            onClick={handleFundEth}
+            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+          >
+            Fund Eth
+          </button>
+
+          <button
+            onClick={handleWithdrawUSDC}
+            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+          >
+            Withdraw USDC
+          </button>
+
+          <button
+            onClick={handleWithdrawEth}
+            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+          >
+            Withdraw Eth
+          </button>
+
+          <button
+            onClick={handleGetBalance}
+            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+          >
+            Get Balance
+          </button>
         </div>
       </div>
     </div>

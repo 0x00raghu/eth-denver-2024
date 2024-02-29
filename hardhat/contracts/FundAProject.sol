@@ -2,11 +2,11 @@
 pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./FundAProjectContributor.sol";
+import "./NFTContract.sol";
 
 contract FundAProject {
     address payable public owner;
-    FundAProjectContributor public fundAProjectContributor;
+    NFTContract public nFTContract;
     IERC20 public usdcToken;
 
     event ProjectCreated(string name, uint256 usdcBalance, uint256 ethBalance, address owner, string gitUrl);
@@ -29,7 +29,7 @@ contract FundAProject {
     constructor(address _usdcAddress, address nftAddress) {
         owner = payable(msg.sender);
         usdcToken = IERC20(_usdcAddress);
-        fundAProjectContributor = FundAProjectContributor(nftAddress);
+        nFTContract = NFTContract(nftAddress);
     }
 
     function createProject(string calldata _name, string calldata _gitUrl)
@@ -37,7 +37,7 @@ contract FundAProject {
         returns (bool)
     {
         projects.push(Project(_name, 0, 0, msg.sender, _gitUrl));
-        emit ProjectCreated(_name, 0,0,msg.sender,gitUrl);
+        emit ProjectCreated(_name, 0,0,msg.sender,_gitUrl);
         return true;
     }
 
@@ -50,7 +50,7 @@ contract FundAProject {
         emit USDCFunded(_amount, projectNo);
 
         // award nft to msg.sender
-        fundAProjectContributor.awardNft(msg.sender);
+        nFTContract.awardNft(msg.sender);
     }
 
     function fundEth(uint256 projectNo) public payable {
@@ -59,7 +59,7 @@ contract FundAProject {
         emit EthFunded(msg.value, projectNo);
 
         // award nft to msg.sender
-        fundAProjectContributor.awardNft(msg.sender);
+        nFTContract.awardNft(msg.sender);
     }
 
     function withdrawUSDC(uint256 projectNo) public {
