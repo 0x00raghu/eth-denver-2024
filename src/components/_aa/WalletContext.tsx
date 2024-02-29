@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { createModularAccountAlchemyClient } from '@alchemy/aa-alchemy';
 import { createWalletClient, custom, parseEther } from 'viem';
 import { baseSepolia, WalletClientSigner } from '@alchemy/aa-core';
@@ -70,17 +70,22 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     setIsAuthenticated(true);
   };
 
-  const sendUserOperation = async (toAddress: string, data: string) => {
+  const sendUserOperation = async (toAddress: string, data: string, value: string = '0') => {
     if (!provider) {
       throw new Error('Provider not initialized. Please connect wallet first.');
     }
 
     const target = toAddress as `0x${string}`;
 
+
     const result = await provider.sendUserOperation({
       uo: {
         target,
         data,
+        value: parseEther(value),
+      },
+      overrides: {
+        callGasLimit: 10000000,
       },
     });
 
