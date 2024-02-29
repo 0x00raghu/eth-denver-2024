@@ -800,7 +800,7 @@ const MAIN_CONTRACT = {
       type: 'function',
     },
   ],
-  ADDRESS: 0x962d7be55a4d39b61c04cf5ade72d8ee275a7bcb,
+  ADDRESS: '0x962d7be55a4d39b61c04cf5ade72d8ee275a7bcb',
 };
 
 export const config = {
