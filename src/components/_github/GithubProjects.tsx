@@ -1,5 +1,6 @@
-import { Button, Code } from '@chakra-ui/react';
-import React from 'react';
+import { Button, Code, useDisclosure } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import CreateProjectModal from '@/components/_projects/create-project-modal';
 
 const statuses: any = {
   Complete: 'text-green-700 bg-green-50 ring-green-600/20',
@@ -12,6 +13,15 @@ function classNames(...classes: any) {
 }
 
 const GithubProjects = ({ data }: any) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedProject, setSelectedProject] = useState(data[0]);
+
+  const handleSelectProject = (id: number) => {
+    const _project = data.find((project: any) => project.id === id);
+    setSelectedProject(_project);
+    onOpen();
+  };
+
   return (
     <div>
       <ul role="list" className="divide-y divide-gray-100">
@@ -45,12 +55,14 @@ const GithubProjects = ({ data }: any) => {
                 </div>
               </div>
               <div className="flex flex-none items-center gap-x-4">
-                <Button backgroundColor={'black'} color={'white'}>
+                <Button backgroundColor={'black'} color={'white'} onClick={() => handleSelectProject(project.id)}>
                   Select
                 </Button>
               </div>
             </li>
           ))}
+
+        {isOpen && <CreateProjectModal item={selectedProject} onClose={onClose} isOpen={isOpen} />}
       </ul>
     </div>
   );

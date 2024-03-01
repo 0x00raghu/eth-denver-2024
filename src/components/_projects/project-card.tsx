@@ -1,10 +1,13 @@
 import Image from 'next/image';
-import { StarIcon, CurrencyDollarIcon } from '@heroicons/react/24/solid';
+import { StarIcon, CurrencyDollarIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import { Button } from '@chakra-ui/react';
 import DonateModal from './donate-modal';
-import { projectsData } from '@/constants/projects-data';
 
 const ProjectCard = ({ item, isOpen, onOpen, onClose }: any) => {
+  const openInNewTab = (url: string) => {
+    window.open(url, '_blank', 'noreferrer');
+  };
+
   return (
     <div className="w-full max-w-xl">
       <div className="bg-white m-3 px-3 pt-3 pb-12 my-20 shadow-courses rounded-2xl">
@@ -19,7 +22,7 @@ const ProjectCard = ({ item, isOpen, onOpen, onClose }: any) => {
 
         <div className="px-3">
           <h4 className="text-2xl font-bold pt-6 text-black">{item.name}</h4>
-          <h4 className="text-2xl font-bold pt-1 text-black">{item.gitUrl}</h4>
+          <h4 className="text-2xl font-bold pt-1 text-black">{item.html_url}</h4>
 
           <div>
             <h3 className="text-base font-normal pt-6 opacity-75">{item.owner}</h3>
@@ -42,6 +45,18 @@ const ProjectCard = ({ item, isOpen, onOpen, onClose }: any) => {
           </div>
 
           <hr style={{ color: '#C4C4C4' }} />
+
+          <div className="flex justify-between pt-6 w-full max-w-7xl">
+            <Button
+              onClick={() => openInNewTab(item.gitUrl)}
+              backgroundColor={'black'}
+              color={'white'}
+              width={'inherit'}
+              rightIcon={<ArrowTopRightOnSquareIcon className="h-6 w-6" aria-hidden="true" />}
+            >
+              View on Github
+            </Button>
+          </div>
 
           <div className="flex justify-between pt-6 w-full max-w-7xl">
             <Button

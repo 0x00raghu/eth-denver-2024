@@ -25,18 +25,16 @@ const Project = () => {
         <div className="sm:flex justify-between items-center">
           <h3 className="text-midnightblue text-4xl lg:text-55xl font-semibold mb-5 sm:mb-0">Popular projects.</h3>
           <Link href={'/list-project'} className="text-Blueviolet text-lg font-medium space-links">
-            Explore projects&nbsp;&gt;&nbsp;
+            List Your Project&nbsp;&gt;&nbsp;
           </Link>
         </div>
 
-        {projects &&
-          projects.map((item: any, i: any) => {
-            return (
-              <div className="grid grid-cols-3 justify-center min-h-screen" key={i}>
-                <ProjectCard item={item} onOpen={onOpen} onClose={onClose} isOpen={isOpen} />
-              </div>
-            );
-          })}
+        <div className="grid grid-cols-3 justify-center w-full">
+          {projects &&
+            projects.map((item: any, i: any) => {
+              return <ProjectCard item={item} onOpen={onOpen} onClose={onClose} isOpen={isOpen} key={i} />;
+            })}
+        </div>
       </div>
     </>
   );

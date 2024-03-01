@@ -15,6 +15,8 @@ interface WalletContextType {
   sendUserOperation: (toAddress: string, data: string) => Promise<void>;
   getWalletBalances: () => Promise<any>;
   tokenBalances: any[];
+  txnStatus: string | null;
+  resetTxnStatus: () => Promise<void>;
 }
 
 interface WalletProviderProps {
@@ -37,6 +39,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [address, setAddress] = useState<string>('');
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [tokenBalances, setTokenBalances] = useState<any>([]);
+  const [txnStatus, setTxnStatus] = useState<string | null>(null);
 
   const connectWallet = async () => {
     console.log('connectWallet: ', connectWallet);
@@ -74,8 +77,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     }
 
     const target = toAddress as `0x${string}`;
-
-
+    await setTxnStatus('started');
     const result = await provider.sendUserOperation({
       uo: {
         target,
@@ -86,12 +88,14 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         callGasLimit: 10000000,
       },
     });
+    await setTxnStatus('initiated');
 
     console.log('UserOperation Hash: ', result);
 
     const txHash = await provider.waitForUserOperationTransaction({
       hash: result.hash,
     });
+    await setTxnStatus('completed');
 
     console.log('Transaction Hash: ', txHash);
     return txHash;
@@ -122,8 +126,14 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     return tokenBalancesNew;
   };
 
+  const resetTxnStatus = async () => {
+    setTxnStatus(null);
+  };
+
   return (
-    <WalletContext.Provider value={{ provider, address, isAuthenticated, connectWallet, sendUserOperation, getWalletBalances, tokenBalances }}>
+    <WalletContext.Provider
+      value={{ provider, address, isAuthenticated, connectWallet, sendUserOperation, getWalletBalances, tokenBalances, txnStatus, resetTxnStatus }}
+    >
       {children}
     </WalletContext.Provider>
   );

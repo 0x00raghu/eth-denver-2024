@@ -9,3 +9,13 @@ export const fetchGitHubRepos = async (username: string) => {
     return null;
   }
 };
+
+export const fetchGitHubAccountByEmail = async (email: string) => {
+  try {
+    const response = await axios.get(`https://api.github.com/search/users?q=${email}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching GitHub repos:', error);
+    return null;
+  }
+};
