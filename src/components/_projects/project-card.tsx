@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { StarIcon, CurrencyDollarIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
-import { Button } from '@chakra-ui/react';
+import { Button, Code } from '@chakra-ui/react';
 import DonateModal from './donate-modal';
 import { useEffect, useState } from 'react';
 
@@ -24,14 +24,12 @@ const ProjectCard = ({ item, isOpen, handleSelectProject, onClose, selectedProje
         <div className="px-3">
           <h4 className="text-2xl font-bold pt-6 text-black">{item.name}</h4>
           <h4 className="text-2xl font-bold pt-1 text-black">{item.html_url}</h4>
-
           <div>
             <h3 className="text-base font-normal pt-6 opacity-75">{item.owner}</h3>
           </div>
-
           <div className="flex justify-between item-center py-6">
             <div className="flex gap-4">
-              <h3 className="text-red text-22xl font-medium">{4}</h3>
+              <h3 className="text-red text-22xl font-medium">{item._githubMeta?.stargazers_count}</h3>
               <div className="flex">
                 <StarIcon className="h-5 w-5 text-gold" />
                 <StarIcon className="h-5 w-5 text-gold" />
@@ -44,9 +42,11 @@ const ProjectCard = ({ item, isOpen, handleSelectProject, onClose, selectedProje
               <h3 className="text-3xl font-medium">${item.usdcBalance}</h3>
             </div>
           </div>
-
+          <h5>Forks: {item?._githubMeta?.forks_count}</h5>
+          <h3>Last Updated At: {item?._githubMeta?.pushed_at}</h3>
+          <Code>{item?._githubMeta?.owner?.login}</Code> <br />
+          <Code>{item?._githubMeta?.visibility}</Code>
           <hr style={{ color: '#C4C4C4' }} />
-
           <div className="flex justify-between pt-6 w-full max-w-7xl">
             <Button
               onClick={() => openInNewTab(item.gitUrl)}
@@ -58,7 +58,6 @@ const ProjectCard = ({ item, isOpen, handleSelectProject, onClose, selectedProje
               View on Github
             </Button>
           </div>
-
           <div className="flex justify-between pt-6 w-full max-w-7xl">
             <Button
               onClick={() => handleSelectProject(item)}
@@ -70,7 +69,6 @@ const ProjectCard = ({ item, isOpen, handleSelectProject, onClose, selectedProje
               Donate USDC
             </Button>
           </div>
-
           {isOpen && <DonateModal item={selectedProject} onClose={onClose} isOpen={isOpen} index={index} />}
         </div>
       </div>

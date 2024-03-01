@@ -19,3 +19,16 @@ export const fetchGitHubAccountByEmail = async (email: string) => {
     return null;
   }
 };
+
+export const fetchRepoMetaData = async (url: string) => {
+  try {
+    const parts = url.split('/');
+    const username = parts[parts.length - 2];
+    const repo = parts[parts.length - 1];
+    const response = await axios.get(`https://api.github.com/repos/${username}/${repo}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching GitHub repos:', error);
+    return null;
+  }
+};
