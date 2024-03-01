@@ -19,10 +19,12 @@ export function AuthButton() {
   }
   return (
     <>
-      Not signed in <br />
-      <Button onClick={() => signIn()} colorScheme="pink">
-        Sign in
-      </Button>
+      <Wrap spacing={4}>
+        {/* Not signed in? */}
+        <Button onClick={() => signIn()} backgroundColor={'black'} color={'white'}>
+          Connect Github
+        </Button>
+      </Wrap>
     </>
   );
 }

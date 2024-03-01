@@ -1,5 +1,3 @@
-export const USDC_CONTRACT_ADDRESS = 0xb20d3271769a0ccfae255f2456f3163668144b53;
-
 const USDC_CONTRACT = {
   ABI: [
     { inputs: [{ internalType: 'address', name: 'initialOwner', type: 'address' }], stateMutability: 'nonpayable', type: 'constructor' },
@@ -128,7 +126,7 @@ const USDC_CONTRACT = {
       type: 'function',
     },
   ],
-  ADDRESS:"0xB20D3271769A0CCFAe255F2456F3163668144B53"
+  ADDRESS: '0xD733D48f2a7F57D4559F98ae07f87Dab595E3523',
 };
 
 const NFT_CONTRACT = {
@@ -399,7 +397,7 @@ const NFT_CONTRACT = {
           type: 'address',
         },
       ],
-      name: 'setFundAProjectAddresst',
+      name: 'setFundAProjectAddress',
       outputs: [],
       stateMutability: 'nonpayable',
       type: 'function',
@@ -624,35 +622,11 @@ const NFT_CONTRACT = {
       type: 'function',
     },
   ],
-  ADDRESS: "0xda5e8cd0c3baff51a44da397a7827a966c43ae42",
+  ADDRESS: '0x8d68915F87C60c1e14062567BbB2DE2264cAbaa6',
 };
 
 const MAIN_CONTRACT = {
   ABI: [
-    {
-      inputs: [
-        {
-          internalType: 'string',
-          name: '_name',
-          type: 'string',
-        },
-        {
-          internalType: 'string',
-          name: '_gitUrl',
-          type: 'string',
-        },
-      ],
-      name: 'createProject',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
     {
       inputs: [
         {
@@ -663,6 +637,16 @@ const MAIN_CONTRACT = {
         {
           internalType: 'address',
           name: 'nftAddress',
+          type: 'address',
+        },
+        {
+          internalType: 'address',
+          name: '_ethPriceDataFeed',
+          type: 'address',
+        },
+        {
+          internalType: 'address',
+          name: '_usdcPriceDataFeed',
           type: 'address',
         },
       ],
@@ -706,37 +690,6 @@ const MAIN_CONTRACT = {
       ],
       name: 'EthWithdrawn',
       type: 'event',
-    },
-    {
-      inputs: [
-        {
-          internalType: 'uint256',
-          name: 'projectNo',
-          type: 'uint256',
-        },
-      ],
-      name: 'fundEth',
-      outputs: [],
-      stateMutability: 'payable',
-      type: 'function',
-    },
-    {
-      inputs: [
-        {
-          internalType: 'uint256',
-          name: '_amount',
-          type: 'uint256',
-        },
-        {
-          internalType: 'uint256',
-          name: 'projectNo',
-          type: 'uint256',
-        },
-      ],
-      name: 'fundUSDC',
-      outputs: [],
-      stateMutability: 'nonpayable',
-      type: 'function',
     },
     {
       anonymous: false,
@@ -816,14 +769,51 @@ const MAIN_CONTRACT = {
     {
       inputs: [
         {
-          internalType: 'uint256',
-          name: 'projectNo',
-          type: 'uint256',
+          internalType: 'string',
+          name: '_name',
+          type: 'string',
+        },
+        {
+          internalType: 'string',
+          name: '_gitUrl',
+          type: 'string',
         },
       ],
-      name: 'withdrawEth',
-      outputs: [],
+      name: 'createProject',
+      outputs: [
+        {
+          internalType: 'bool',
+          name: '',
+          type: 'bool',
+        },
+      ],
       stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'ethPriceDataFeed',
+      outputs: [
+        {
+          internalType: 'contract AggregatorV3Interface',
+          name: '',
+          type: 'address',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'fundAProjectContributorNFT',
+      outputs: [
+        {
+          internalType: 'contract FundAProjectContributorNFT',
+          name: '',
+          type: 'address',
+        },
+      ],
+      stateMutability: 'view',
       type: 'function',
     },
     {
@@ -834,7 +824,25 @@ const MAIN_CONTRACT = {
           type: 'uint256',
         },
       ],
-      name: 'withdrawUSDC',
+      name: 'fundEth',
+      outputs: [],
+      stateMutability: 'payable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'uint256',
+          name: '_amount',
+          type: 'uint256',
+        },
+        {
+          internalType: 'uint256',
+          name: 'projectNo',
+          type: 'uint256',
+        },
+      ],
+      name: 'fundUSDC',
       outputs: [],
       stateMutability: 'nonpayable',
       type: 'function',
@@ -853,13 +861,24 @@ const MAIN_CONTRACT = {
       type: 'function',
     },
     {
-      inputs: [],
-      name: 'nFTContract',
+      inputs: [
+        {
+          internalType: 'uint256',
+          name: 'projectNo',
+          type: 'uint256',
+        },
+      ],
+      name: 'getProjectFundInUSD',
       outputs: [
         {
-          internalType: 'contract NFTContract',
+          internalType: 'uint256',
           name: '',
-          type: 'address',
+          type: 'uint256',
+        },
+        {
+          internalType: 'uint256',
+          name: '',
+          type: 'uint256',
         },
       ],
       stateMutability: 'view',
@@ -919,6 +938,19 @@ const MAIN_CONTRACT = {
     },
     {
       inputs: [],
+      name: 'usdcPriceDataFeed',
+      outputs: [
+        {
+          internalType: 'contract AggregatorV3Interface',
+          name: '',
+          type: 'address',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
       name: 'usdcToken',
       outputs: [
         {
@@ -930,13 +962,38 @@ const MAIN_CONTRACT = {
       stateMutability: 'view',
       type: 'function',
     },
+    {
+      inputs: [
+        {
+          internalType: 'uint256',
+          name: 'projectNo',
+          type: 'uint256',
+        },
+      ],
+      name: 'withdrawEth',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'uint256',
+          name: 'projectNo',
+          type: 'uint256',
+        },
+      ],
+      name: 'withdrawUSDC',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
   ],
-  ADDRESS: '0x962d7be55a4d39b61c04cf5ade72d8ee275a7bcb',
+  ADDRESS: '0x1127ac9A60f5ef63dD40c3fb660bCE67020cfEa5',
 };
 
 export const config = {
-  USDC_CONTRACT_ADDRESS,
   MAIN_CONTRACT,
   NFT_CONTRACT,
-  USDC_CONTRACT
+  USDC_CONTRACT,
 };

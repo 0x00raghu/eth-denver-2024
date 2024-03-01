@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { StarIcon, CurrencyDollarIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import { Button, Code } from '@chakra-ui/react';
 import DonateModal from './donate-modal';
-import { useEffect, useState } from 'react';
 
 const ProjectCard = ({ item, isOpen, handleSelectProject, onClose, selectedProject, index }: any) => {
   const openInNewTab = (url: string) => {

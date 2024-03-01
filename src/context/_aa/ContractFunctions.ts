@@ -89,3 +89,15 @@ export const getBalance = () => {
 
   return { uo };
 };
+
+export const getProjectFundInUSD = (projectNo: number) => {
+  const uoCallData = encodeFunctionData({
+    abi,
+    functionName: 'getProjectFundInUSD',
+    args: [projectNo],
+  });
+  console.log(uoCallData, 'uiCallData');
+  const uo = [{ target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: '0' }];
+
+  return { uo };
+};

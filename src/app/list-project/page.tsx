@@ -10,16 +10,18 @@ const ListProject = () => {
   const { data: session }: any = useSession();
 
   const fetchRepos = async () => {
-    const emailData: any = await fetchGitHubAccountByEmail(session?.user?.email);
-    const userName = emailData?.items[0]?.login;
-    const data = await fetchGitHubRepos(userName);
-    setRepos(data);
+    if (session?.user?.email) {
+      const emailData: any = await fetchGitHubAccountByEmail(session?.user?.email);
+      const userName = emailData?.items[0]?.login;
+      const data = await fetchGitHubRepos('0x00raghu'); //userName || 0x00raghu
+      setRepos(data);
+    }
   };
 
   useEffect(() => {
     fetchRepos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session]);
+  }, [session?.user?.email]);
 
   return (
     <div className="mx-auto max-w-7xl sm:py-8 px-4 lg:px-8 ">

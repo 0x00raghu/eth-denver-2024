@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { useWallet } from '@/context/_aa/WalletContext';
 import DynamicReactTable from '@/utils/table';
-import { createProject, fundUSDC, fundEth, withdrawUSDC, withdrawEth, getBalance } from '@/context/_aa/ContractFunctions'; // Import the additional contract functions
+import { getProjectFundInUSD, withdrawUSDC, withdrawEth, getBalance } from '@/context/_aa/ContractFunctions'; // Import the additional contract functions
 import { ArrowDownIcon } from '@heroicons/react/24/solid';
 import { openTransak } from '@/components/_onramp/transak';
 import { useEffect } from 'react';
@@ -38,6 +38,11 @@ const Home = () => {
     await sendUserOperation(uo);
   };
 
+  const handleGetBalanceLiveFeed = async () => {
+    const { uo }: any = await getProjectFundInUSD(0); // Adjust arguments as needed
+    await sendUserOperation(uo);
+  };
+
   return (
     <div id="home-section" className="bg-lightkblue">
       <div className="mx-auto max-w-7xl pt-20 sm:pb-24 px-6 space-y-10">
@@ -61,6 +66,13 @@ const Home = () => {
             className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
           >
             Get Balance
+          </button>
+
+          <button
+            onClick={handleGetBalanceLiveFeed}
+            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
+          >
+            Get Balance With Feeds
           </button>
 
           <button

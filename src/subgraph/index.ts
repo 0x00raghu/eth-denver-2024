@@ -1,7 +1,7 @@
 import { fetchRepoMetaData } from '@/utils/github';
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 
-const APIURL = 'https://api.studio.thegraph.com/query/36992/crypto-lift-connect/version/latest';
+const APIURL = 'https://api.studio.thegraph.com/query/36992/crypto-lift-connect-v2/version/latest';
 
 const getProjectCreatedQuery = `
 query GetProjectCreated {
