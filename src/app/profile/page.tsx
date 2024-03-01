@@ -1,8 +1,8 @@
 'use client';
 import Image from 'next/image';
-import { useWallet } from '@/components/_aa/WalletContext';
+import { useWallet } from '@/context/_aa/WalletContext';
 import DynamicReactTable from '@/utils/table';
-import { createProject, fundUSDC, fundEth, withdrawUSDC, withdrawEth, getBalance } from '@/components/_aa/ContractFunctions'; // Import the additional contract functions
+import { createProject, fundUSDC, fundEth, withdrawUSDC, withdrawEth, getBalance } from '@/context/_aa/ContractFunctions'; // Import the additional contract functions
 
 const Home = () => {
   const { address, sendUserOperation, tokenBalances, getWalletBalances } = useWallet();

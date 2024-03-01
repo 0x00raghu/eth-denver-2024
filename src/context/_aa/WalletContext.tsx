@@ -63,8 +63,6 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       },
     });
 
-    // 0.996840926798627995
-
     setProvider(alchemyProvider);
     setAddress(alchemyProvider.getAddress());
     setIsAuthenticated(true);
