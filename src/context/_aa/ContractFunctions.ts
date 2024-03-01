@@ -1,4 +1,4 @@
-import { encodeFunctionData } from 'viem';
+import { encodeFunctionData, parseEther } from 'viem';
 import { config } from '@/constants/config';
 
 const contractAddress: string = config.MAIN_CONTRACT.ADDRESS;
@@ -11,21 +11,21 @@ export const createProject = (name: string, gitUrl: string) => {
     args: [name, gitUrl],
   });
   console.log(uoCallData, 'uiCallData');
-
-  return { uoCallData, contractAddress };
+  const uo = [{ target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: '0' }];
+  return { uo };
 };
 
 export const fundUSDC = (amount: number, projectNo: number) => {
   const approveCallData = encodeFunctionData({
     abi: config.USDC_CONTRACT.ABI,
     functionName: 'approve',
-    args: [config.MAIN_CONTRACT.ADDRESS, "10000000"],
+    args: [config.MAIN_CONTRACT.ADDRESS, parseEther(`${amount}`)],
   });
 
   const uoCallData = encodeFunctionData({
     abi,
     functionName: 'fundUSDC',
-    args: [10000000, projectNo],
+    args: [parseEther(`${amount}`), projectNo],
   });
 
   const uo = [
@@ -41,14 +41,17 @@ export const fundUSDC = (amount: number, projectNo: number) => {
 };
 
 export const fundEth = (amount: number, projectNo: number) => {
+  console.log(amount, projectNo);
+
   const uoCallData = encodeFunctionData({
     abi,
     functionName: 'fundEth',
-    args: [BigInt(amount), projectNo],
+    args: [projectNo],
   });
   console.log(uoCallData, 'uiCallData');
+  const uo = [{ target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: amount }];
 
-  return { uoCallData, contractAddress };
+  return { uo };
 };
 
 export const withdrawUSDC = (amount: number, projectNo: number) => {
@@ -58,8 +61,9 @@ export const withdrawUSDC = (amount: number, projectNo: number) => {
     args: [BigInt(amount), projectNo],
   });
   console.log(uoCallData, 'uiCallData');
+  const uo = [{ target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: '0' }];
 
-  return { uoCallData, contractAddress };
+  return { uo };
 };
 
 export const withdrawEth = (projectNo: number) => {
@@ -69,8 +73,9 @@ export const withdrawEth = (projectNo: number) => {
     args: [projectNo],
   });
   console.log(uoCallData, 'uiCallData');
+  const uo = [{ target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: '0' }];
 
-  return { uoCallData, contractAddress };
+  return { uo };
 };
 
 export const getBalance = () => {
@@ -80,6 +85,7 @@ export const getBalance = () => {
     args: [],
   });
   console.log(uoCallData, 'uiCallData');
+  const uo = [{ target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: '0' }];
 
-  return { uoCallData, contractAddress };
+  return { uo };
 };

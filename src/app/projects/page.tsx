@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 const Project = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [projects, setProjects] = useState([]);
+  const [selectedProject, setSelectedProject] = useState(projects[0]);
 
   useEffect(() => {
     handleGetProjects();
@@ -18,7 +19,10 @@ const Project = () => {
     console.log(ap, 'getProjectCreated');
     setProjects(ap);
   };
-
+  const handleSelectProject = (item: any) => {
+    setSelectedProject(item);
+    onOpen();
+  };
   return (
     <>
       <div className="mx-auto max-w-7xl sm:py-8 px-4 lg:px-8 ">
@@ -32,7 +36,18 @@ const Project = () => {
         <div className="grid grid-cols-3 justify-center w-full">
           {projects &&
             projects.map((item: any, i: any) => {
-              return <ProjectCard item={item} onOpen={onOpen} onClose={onClose} isOpen={isOpen} key={i} />;
+              return (
+                <ProjectCard
+                  item={item}
+                  index={i}
+                  selectedProject={selectedProject}
+                  onOpen={onOpen}
+                  onClose={onClose}
+                  isOpen={isOpen}
+                  key={item.transactionHash}
+                  handleSelectProject={handleSelectProject}
+                />
+              );
             })}
         </div>
       </div>

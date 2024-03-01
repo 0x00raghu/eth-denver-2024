@@ -18,7 +18,7 @@ interface WalletContextType {
   address: string | null;
   isAuthenticated: boolean;
   connectWallet: () => Promise<void>;
-  sendUserOperation: (uo:[uo]) => Promise<void>;
+  sendUserOperation: (uo: [uo]) => Promise<void>;
   getWalletBalances: () => Promise<any>;
   tokenBalances: any[];
   txnStatus: string | null;
@@ -77,15 +77,12 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     setIsAuthenticated(true);
   };
 
-  
-
   const sendUserOperation = async (params: [uo]) => {
     console.log('params: ', params);
     if (!provider) {
       throw new Error('Provider not initialized. Please connect wallet first.');
     }
 
-    
     await setTxnStatus('started');
     const result = await provider.sendUserOperation({
       uo: params.map(({ target, data, value }) => {

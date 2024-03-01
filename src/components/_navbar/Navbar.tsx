@@ -7,6 +7,7 @@ import Drawer from './Drawer';
 import Drawerdata from './Drawerdata';
 import Image from 'next/image';
 import { useWallet } from '@/context/_aa/WalletContext';
+import { Code } from '@chakra-ui/react';
 
 interface NavigationItem {
   name: string;
@@ -16,7 +17,7 @@ interface NavigationItem {
 
 const navigation: NavigationItem[] = [
   { name: 'Profile', href: '/profile', current: false },
-  { name: 'About us', href: '#about-section', current: false },
+  { name: 'List Project', href: '/list-project', current: false },
   { name: 'Projects', href: '/projects', current: false },
 ];
 
@@ -69,12 +70,8 @@ const Navbar = () => {
                 </div>
               </div>
               <div className="gap-6 hidden lg:flex">
-                {/* <button className='flex justify-end text-xl font-medium bg-bgpink text-pink py-4 px-4 lg:px-8 navbutton rounded-full hover:text-black'>Sign in</button> */}
-                {/* <Signindialog /> */}
                 {isAuthenticated ? (
-                  <button className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink">
-                    {address}
-                  </button>
+                  <Code colorScheme="yellow">{address}</Code>
                 ) : (
                   <button
                     onClick={connectWallet}

@@ -46,8 +46,8 @@ const CreateProjectModal = ({ item, isOpen, onClose }: any) => {
   };
 
   const handleCreateProject = async (_projectName: string, _githubUrl: string) => {
-    const { uoCallData, contractAddress }: any = await createProject(_projectName, _githubUrl);
-    await sendUserOperation(contractAddress, uoCallData);
+    const { uo }: any = await createProject(_projectName, _githubUrl);
+    await sendUserOperation(uo);
   };
 
   const handleSubmit = async (e: any) => {

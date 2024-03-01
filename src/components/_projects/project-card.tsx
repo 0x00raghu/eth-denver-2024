@@ -2,8 +2,9 @@ import Image from 'next/image';
 import { StarIcon, CurrencyDollarIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import { Button } from '@chakra-ui/react';
 import DonateModal from './donate-modal';
+import { useEffect, useState } from 'react';
 
-const ProjectCard = ({ item, isOpen, onOpen, onClose }: any) => {
+const ProjectCard = ({ item, isOpen, handleSelectProject, onClose, selectedProject, index }: any) => {
   const openInNewTab = (url: string) => {
     window.open(url, '_blank', 'noreferrer');
   };
@@ -60,7 +61,7 @@ const ProjectCard = ({ item, isOpen, onOpen, onClose }: any) => {
 
           <div className="flex justify-between pt-6 w-full max-w-7xl">
             <Button
-              onClick={onOpen}
+              onClick={() => handleSelectProject(item)}
               leftIcon={<CurrencyDollarIcon className="h-6 w-6" aria-hidden="true" />}
               colorScheme="pink"
               variant="solid"
@@ -70,7 +71,7 @@ const ProjectCard = ({ item, isOpen, onOpen, onClose }: any) => {
             </Button>
           </div>
 
-          <DonateModal item={item} onClose={onClose} isOpen={isOpen} />
+          {isOpen && <DonateModal item={selectedProject} onClose={onClose} isOpen={isOpen} index={index} />}
         </div>
       </div>
     </div>

@@ -10,6 +10,10 @@ query GetProjectCreated {
     owner
     usdcBalance
     transactionHash
+    id
+    ethBalance
+    blockTimestamp
+    blockNumber
   }
 }
 `;

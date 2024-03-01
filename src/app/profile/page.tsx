@@ -5,13 +5,10 @@ import DynamicReactTable from '@/utils/table';
 import { createProject, fundUSDC, fundEth, withdrawUSDC, withdrawEth, getBalance } from '@/context/_aa/ContractFunctions'; // Import the additional contract functions
 import { ArrowDownIcon } from '@heroicons/react/24/solid';
 import { openTransak } from '@/components/_onramp/transak';
+import { useEffect } from 'react';
 
 const Home = () => {
   const { address, sendUserOperation, tokenBalances, getWalletBalances } = useWallet();
-
-  const handleTransferAmount = async () => {
-    if (address) await sendUserOperation('0x5B4d77e199FE8e5090009C72d2a5581C74FEbE89', '10000000000');
-  };
 
   const handleGetBalances = async () => {
     const balances = await getWalletBalances();
@@ -19,80 +16,32 @@ const Home = () => {
     console.log(balances, 'balance');
   };
 
-  const handleCreateProject = async () => {
-    const { uoCallData, contractAddress } = await createProject('test1', 'https://github.com/vuejs/eslint-config-typescript');
-    await sendUserOperation(contractAddress, uoCallData);
-  };
-
-  const handleFundUSDC = async () => {
-    const { uo } = await fundUSDC(1, 0);
-    await sendUserOperation(uo);
-  };
-
-  // Function to handle funding Ethereum
-  const handleFundEth = async () => {
-    const { uoCallData, contractAddress } = await fundEth(1, 0); // Adjust arguments as needed
-    await sendUserOperation(contractAddress, uoCallData);
-  };
+  useEffect(() => {
+    handleGetBalances();
+  }, [address]);
 
   // Function to handle withdrawing USDC
   const handleWithdrawUSDC = async () => {
-    const { uoCallData, contractAddress } = await withdrawUSDC(1, 0); // Adjust arguments as needed
-    await sendUserOperation(contractAddress, uoCallData);
+    const { uo }: any = await withdrawUSDC(1, 0); // Adjust arguments as needed
+    await sendUserOperation(uo);
   };
 
   // Function to handle withdrawing Ethereum
   const handleWithdrawEth = async () => {
-    const { uoCallData, contractAddress } = await withdrawEth(0); // Adjust arguments as needed
-    await sendUserOperation(contractAddress, uoCallData);
+    const { uo }: any = await withdrawEth(0); // Adjust arguments as needed
+    await sendUserOperation(uo);
   };
 
   // Function to handle getting balance
   const handleGetBalance = async () => {
-    const { uoCallData, contractAddress } = await getBalance(); // Adjust arguments as needed
-    await sendUserOperation(contractAddress, uoCallData);
+    const { uo }: any = await getBalance(); // Adjust arguments as needed
+    await sendUserOperation(uo);
   };
 
   return (
     <div id="home-section" className="bg-lightkblue">
-      <div className="mx-auto max-w-7xl pt-20 sm:pb-24 px-6">
-        {tokenBalances && tokenBalances.length > 0 && <DynamicReactTable data={tokenBalances} />}
-
+      <div className="mx-auto max-w-7xl pt-20 sm:pb-24 px-6 space-y-10">
         <div className="relative text-white focus-within:text-white grid grid-cols-3 flex-row gap-x-2 input-shadow rounded-full pt-5 space-y-3  max-w-7xl">
-          <button
-            onClick={handleGetBalances}
-            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
-          >
-            Get Balances
-          </button>
-
-          <button
-            onClick={handleTransferAmount}
-            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
-          >
-            Transfer
-          </button>
-
-          <button
-            onClick={handleCreateProject}
-            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
-          >
-            Create Project
-          </button>
-
-          <button
-            onClick={handleFundUSDC}
-            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
-          >
-            Fund USDC
-          </button>
-          <button
-            onClick={handleFundEth}
-            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
-          >
-            Fund Eth
-          </button>
-
           <button
             onClick={handleWithdrawUSDC}
             className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
@@ -125,6 +74,8 @@ const Home = () => {
             Buy Crypto
           </button>
         </div>
+
+        {tokenBalances && tokenBalances.length > 0 && <DynamicReactTable data={tokenBalances} />}
       </div>
     </div>
   );
