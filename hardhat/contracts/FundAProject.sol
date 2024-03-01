@@ -2,14 +2,23 @@
 pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./NFTContract.sol";
+import "./FundAProjectContributorNFT.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract FundAProject {
     address payable public owner;
-    NFTContract public nFTContract;
+    FundAProjectContributorNFT public fundAProjectContributorNFT;
     IERC20 public usdcToken;
+    AggregatorV3Interface public ethPriceDataFeed;
+    AggregatorV3Interface public usdcPriceDataFeed;
 
-    event ProjectCreated(string name, uint256 usdcBalance, uint256 ethBalance, address owner, string gitUrl);
+    event ProjectCreated(
+        string name,
+        uint256 usdcBalance,
+        uint256 ethBalance,
+        address owner,
+        string gitUrl
+    );
     event USDCFunded(uint256 amount, uint256 projectNo);
     event EthFunded(uint256 amount, uint256 projectNo);
     event USDCWithdrawn(uint256 amount, uint256 projectNo);
@@ -26,10 +35,17 @@ contract FundAProject {
 
     Project[] public projects;
 
-    constructor(address _usdcAddress, address nftAddress) {
+    constructor(
+        address _usdcAddress,
+        address nftAddress,
+        address _ethPriceDataFeed,
+        address _usdcPriceDataFeed
+    ) {
         owner = payable(msg.sender);
         usdcToken = IERC20(_usdcAddress);
-        nFTContract = NFTContract(nftAddress);
+        fundAProjectContributorNFT = FundAProjectContributorNFT(nftAddress);
+        ethPriceDataFeed = AggregatorV3Interface(_ethPriceDataFeed);
+        usdcPriceDataFeed = AggregatorV3Interface(_usdcPriceDataFeed);
     }
 
     function createProject(string calldata _name, string calldata _gitUrl)
@@ -37,7 +53,7 @@ contract FundAProject {
         returns (bool)
     {
         projects.push(Project(_name, 0, 0, msg.sender, _gitUrl));
-        emit ProjectCreated(_name, 0,0,msg.sender,_gitUrl);
+        emit ProjectCreated(_name, 0, 0, msg.sender, _gitUrl);
         return true;
     }
 
@@ -50,7 +66,7 @@ contract FundAProject {
         emit USDCFunded(_amount, projectNo);
 
         // award nft to msg.sender
-        nFTContract.awardNft(msg.sender);
+        fundAProjectContributorNFT.awardNft(msg.sender);
     }
 
     function fundEth(uint256 projectNo) public payable {
@@ -59,7 +75,7 @@ contract FundAProject {
         emit EthFunded(msg.value, projectNo);
 
         // award nft to msg.sender
-        nFTContract.awardNft(msg.sender);
+        fundAProjectContributorNFT.awardNft(msg.sender);
     }
 
     function withdrawUSDC(uint256 projectNo) public {
@@ -82,7 +98,21 @@ contract FundAProject {
         emit EthWithdrawn(projects[projectNo].ethBalance, projectNo);
     }
 
+    function getProjectFundInUSD(uint256 projectNo)
+        public
+        view
+        returns (uint256, uint256)
+    {
+        (, int256 ethPrice, , , ) = ethPriceDataFeed.latestRoundData();
+        (, int256 usdcPrice, , , ) = usdcPriceDataFeed.latestRoundData();
+        return (
+            uint256(ethPrice) * projects[projectNo].ethBalance,
+            uint256(usdcPrice) * projects[projectNo].usdcBalance
+        );
+    }
+
     function getBalance() public view returns (uint256) {
         return address(this).balance;
     }
 }
+

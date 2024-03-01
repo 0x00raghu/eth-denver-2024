@@ -3,16 +3,16 @@ pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract NFTContract is ERC721 {
+contract FundAProjectContributorNFT is ERC721 {
     address public owner;
     address public fundAProjectAddress;
     uint256 private _nextTokenId;
 
-    constructor() ERC721("NFTContract", "FAPC") {
+    constructor() ERC721("FundAProjectContributorNFT", "FAPC") {
         owner = msg.sender;
     }
 
-    function setFundAProjectAddresst(address _fundAProjectAddress) public {
+    function setFundAProjectAddress(address _fundAProjectAddress) public {
         require(msg.sender == owner, "only owner can set the address");
         fundAProjectAddress = _fundAProjectAddress;
     }
