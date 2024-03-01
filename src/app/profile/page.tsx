@@ -25,8 +25,8 @@ const Home = () => {
   };
 
   const handleFundUSDC = async () => {
-    const { uoCallData, contractAddress } = await fundUSDC(1, 0);
-    await sendUserOperation(contractAddress, uoCallData);
+    const { uo } = await fundUSDC(1, 0);
+    await sendUserOperation(uo);
   };
 
   // Function to handle funding Ethereum

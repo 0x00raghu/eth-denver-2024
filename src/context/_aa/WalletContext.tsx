@@ -7,12 +7,18 @@ import { baseSepolia, WalletClientSigner } from '@alchemy/aa-core';
 import { Alchemy, Network } from 'alchemy-sdk';
 import _ from 'lodash';
 
+type uo = {
+  target: string;
+  data: string;
+  value: string;
+};
+
 interface WalletContextType {
   provider: any; // Adjust the type according to your provider type
   address: string | null;
   isAuthenticated: boolean;
   connectWallet: () => Promise<void>;
-  sendUserOperation: (toAddress: string, data: string) => Promise<void>;
+  sendUserOperation: (uo:[uo]) => Promise<void>;
   getWalletBalances: () => Promise<any>;
   tokenBalances: any[];
 }
@@ -58,9 +64,9 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || '',
       chain,
       signer: eoaSigner,
-      gasManagerConfig: {
-        policyId: '7ae5ae77-cc13-413f-8ed0-da340340821d',
-      },
+      // gasManagerConfig: {
+      //   policyId: '7ae5ae77-cc13-413f-8ed0-da340340821d',
+      // },
     });
 
     setProvider(alchemyProvider);
@@ -68,20 +74,23 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     setIsAuthenticated(true);
   };
 
-  const sendUserOperation = async (toAddress: string, data: string, value: string = '0') => {
+  
+
+  const sendUserOperation = async (params: [uo]) => {
+    console.log('params: ', params);
     if (!provider) {
       throw new Error('Provider not initialized. Please connect wallet first.');
     }
 
-    const target = toAddress as `0x${string}`;
-
-
     const result = await provider.sendUserOperation({
-      uo: {
-        target,
-        data,
-        value: parseEther(value),
-      },
+      uo: params.map(({ target, data, value }) => {
+        return {
+          target,
+          data,
+          value: parseEther(value),
+        };
+      }),
+
       overrides: {
         callGasLimit: 10000000,
       },

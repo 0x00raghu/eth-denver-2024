@@ -16,14 +16,28 @@ export const createProject = (name: string, gitUrl: string) => {
 };
 
 export const fundUSDC = (amount: number, projectNo: number) => {
+  const approveCallData = encodeFunctionData({
+    abi: config.USDC_CONTRACT.ABI,
+    functionName: 'approve',
+    args: [config.MAIN_CONTRACT.ADDRESS, "10000000"],
+  });
+
   const uoCallData = encodeFunctionData({
     abi,
     functionName: 'fundUSDC',
-    args: [BigInt(amount), projectNo],
+    args: [10000000, projectNo],
   });
-  console.log(uoCallData, 'uiCallData');
 
-  return { uoCallData, contractAddress };
+  const uo = [
+    {
+      target: config.USDC_CONTRACT.ADDRESS,
+      data: approveCallData,
+      value: '0',
+    },
+    { target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: '0' },
+  ];
+
+  return { uo };
 };
 
 export const fundEth = (amount: number, projectNo: number) => {
