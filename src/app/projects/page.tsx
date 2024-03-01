@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 const Project = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects]: any = useState([]);
   const [selectedProject, setSelectedProject] = useState(projects[0]);
 
   useEffect(() => {
@@ -15,9 +15,9 @@ const Project = () => {
   }, []);
 
   const handleGetProjects = async () => {
-    const ap = await getProjectCreated();
-    console.log(ap, 'getProjectCreated');
-    setProjects(ap);
+    const data = await getProjectCreated();
+    console.log(data, 'getProjectCreated');
+    setProjects(data);
   };
   const handleSelectProject = (item: any) => {
     setSelectedProject(item);
