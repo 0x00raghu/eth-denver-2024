@@ -1,3 +1,5 @@
+import { baseSepolia, arbitrumSepolia } from '@alchemy/aa-core';
+
 const USDC_CONTRACT = {
   ABI: [
     { inputs: [{ internalType: 'address', name: 'initialOwner', type: 'address' }], stateMutability: 'nonpayable', type: 'constructor' },
@@ -992,8 +994,22 @@ const MAIN_CONTRACT = {
   ADDRESS: '0x1127ac9A60f5ef63dD40c3fb660bCE67020cfEa5',
 };
 
+const chainConfig = [
+  {
+    chain: baseSepolia,
+    name: 'Base Sepolia',
+    avatar: '/images/_logo/base.svg',
+  },
+  {
+    chain: arbitrumSepolia,
+    name: 'Arbitrum Sepolia',
+    avatar: '/images/_logo/arbitrum.svg',
+  },
+];
+
 export const config = {
   MAIN_CONTRACT,
   NFT_CONTRACT,
   USDC_CONTRACT,
+  chainConfig,
 };

@@ -1,16 +1,13 @@
 import { Button, Code, useDisclosure } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import CreateProjectModal from '@/components/_projects/create-project-modal';
+import { classNames } from '@/utils/functions';
 
 const statuses: any = {
   Complete: 'text-green-700 bg-green-50 ring-green-600/20',
   'In progress': 'text-gray-600 bg-gray-50 ring-gray-500/10',
   Archived: 'text-yellow-800 bg-yellow-50 ring-yellow-600/20',
 };
-
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(' ');
-}
 
 const GithubProjects = ({ data }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
