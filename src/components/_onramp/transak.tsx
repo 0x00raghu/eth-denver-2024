@@ -1,15 +1,21 @@
 import Pusher from 'pusher-js';
 import { Transak } from '@transak/transak-sdk';
+import { config } from '@/constants/config';
 
-export const openTransak = (productsAvailed: string, address: string) => {
+export const openTransak = (productsAvailed: string, address: string, chain: number) => {
   console.log(productsAvailed, 'productsAvailed');
+
+  const networkConfig: any = {
+    84532: 'base',
+    421614: 'arbitrum',
+  };
   const transakConfig = {
     apiKey: '69feba7f-a1c2-4cfa-a9bd-43072768b0e6',
     environment: 'STAGING',
     fiatCurrency: 'EUR',
     fiatAmount: '66',
     walletAddress: address,
-    network: 'base',
+    network: networkConfig[chain] || 'base',
     productsAvailed,
     widgetHeight: '700px',
     widgetWidth: '450px',

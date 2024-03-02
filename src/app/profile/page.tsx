@@ -6,11 +6,10 @@ import { openTransak } from '@/components/_onramp/transak';
 import { ArrowTopRightOnSquareIcon, ArrowUpIcon } from '@heroicons/react/20/solid';
 import { getProjectCreated } from '@/subgraph';
 import WithdrawModal from '@/components/_projects/withdraw-modal';
-import { Button, Code, useDisclosure } from '@chakra-ui/react';
-
+import { Button, useDisclosure } from '@chakra-ui/react';
 
 const Home = () => {
-  const { address, sendUserOperation, tokenBalances, getWalletBalances, selectedChain, getWalletNfts, nftBalances } = useWallet();
+  const { address, tokenBalances, getWalletBalances, selectedChain, getWalletNfts, nftBalances }: any = useWallet();
   const [projects, setProjects]: any = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedProject, setSelectedProject] = useState(projects?.[0]);
@@ -73,7 +72,7 @@ const Home = () => {
                                 <div className="pt-8 flex rounded-md shadow-sm  justify-center">
                                   <button
                                     type="button"
-                                    onClick={() => openTransak('BUY', '')}
+                                    onClick={() => openTransak('BUY', address, selectedChain.chain.id)}
                                     className="mr-7 inline-flex items-center rounded-md border border-transparent bg-gradient-to-r from-black  to-blue-900 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm "
                                   >
                                     <ArrowDownIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
@@ -81,7 +80,7 @@ const Home = () => {
                                   </button>
                                   <button
                                     type="button"
-                                    onClick={() => openTransak('SELL', '')}
+                                    onClick={() => openTransak('SELL', address, selectedChain.chain.id)}
                                     className="inline-flex items-center rounded-md border border-transparent bg-gradient-to-r from-green-800  via-black to-black  px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                                   >
                                     <ArrowUpIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
@@ -135,10 +134,15 @@ const Home = () => {
                                           </thead>
                                           <tbody className="divide-y divide-gray-200 bg-white">
                                             {tokenBalances.length > 0 &&
-                                              tokenBalances.map((transaction: any, i) => (
+                                              tokenBalances.map((transaction: any, i: any) => (
                                                 <tr key={i}>
                                                   <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-6 flex items-center gap-3">
-                                                  {  <button className={`w-8 h-8  text-white bg-gradient-to-r from-cyan-500  to-gold rounded-full border-slate-400 focus:outline-none`}></button> } { transaction?.symbol || ''}
+                                                    {
+                                                      <button
+                                                        className={`w-8 h-8  text-white bg-gradient-to-r from-cyan-500  to-gold rounded-full border-slate-400 focus:outline-none`}
+                                                      ></button>
+                                                    }{' '}
+                                                    {transaction?.symbol || ''}
                                                   </td>
                                                   <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900">
                                                     {transaction.amount || ''}
@@ -218,10 +222,15 @@ const Home = () => {
                                       </thead>
                                       <tbody className="divide-y divide-gray-200 bg-white">
                                         {nftBalances.length > 0 &&
-                                          nftBalances.map((transaction: any, i) => (
+                                          nftBalances.map((transaction: any, i: any) => (
                                             <tr key={i}>
                                               <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-6 flex items-center gap-3">
-                                              {  <button className={`w-8 h-8  text-white bg-gradient-to-r from-cyan-500  to-green-500 rounded-full border-slate-400 focus:outline-none`}></button> }{transaction?.name || ''}
+                                                {
+                                                  <button
+                                                    className={`w-8 h-8  text-white bg-gradient-to-r from-cyan-500  to-green-500 rounded-full border-slate-400 focus:outline-none`}
+                                                  ></button>
+                                                }
+                                                {transaction?.name || ''}
                                               </td>
                                               <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900">
                                                 {transaction.address || ''}
@@ -267,7 +276,7 @@ const Home = () => {
                 </li>
               ))}
           </ul>
-          {projects.length === 0 && <span className="py-4 m-auto">No data</span>}
+          {(!projects || projects?.length === 0) && <span className="py-4 mx-auto">No data</span>}
           {isOpen && <WithdrawModal item={selectedProject} onClose={onClose} isOpen={isOpen} />}
         </div>
       </div>
