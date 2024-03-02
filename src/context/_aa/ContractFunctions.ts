@@ -45,8 +45,6 @@ export const fundUSDC = (amount: number, projectNo: number, chain: number) => {
 export const fundEth = (amount: number, projectNo: number, chain: number) => {
   const contractAddress: string = config.MAIN_CONTRACT(chain).ADDRESS;
   const abi = config.MAIN_CONTRACT(chain).ABI;
-  console.log(amount, projectNo);
-
   const uoCallData = encodeFunctionData({
     abi,
     functionName: 'fundEth',
@@ -87,11 +85,7 @@ export const withdrawEth = (projectNo: number, chain: number) => {
 };
 
 export const getProjectFundInUSD = async (projectNo: number, chain: number) => {
-  console.log(projectNo, 'projectNo');
-  console.log(chain, 'chain');
-
   const contractAddress: string = config.MAIN_CONTRACT(chain).ADDRESS;
-  console.log(contractAddress, 'contractAddress');
   const abi = config.MAIN_CONTRACT(chain).ABI;
   const contract_one: any = new ethers.Contract(contractAddress, abi, new ethers.BrowserProvider(window.ethereum));
   const result = await contract_one.getProjectFundInUSD(projectNo);

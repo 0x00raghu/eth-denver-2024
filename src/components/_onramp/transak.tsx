@@ -1,5 +1,5 @@
 import Pusher from 'pusher-js';
-import { TransakConfig, Transak } from '@transak/transak-sdk';
+import { Transak } from '@transak/transak-sdk';
 
 export const openTransak = (productsAvailed: string, address: string) => {
   console.log(productsAvailed, 'productsAvailed');

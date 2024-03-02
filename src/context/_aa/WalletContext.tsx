@@ -55,9 +55,6 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [selectedChain, setSelectedChain]: any = useState(config.chainConfig[0]);
 
   const connectWallet = async () => {
-    console.log(selectedChain.chain, 'selectedChain');
-
-    console.log('connectWallet: ', connectWallet);
     const chain = selectedChain.chain;
     const client: any = createWalletClient({
       chain,
@@ -127,8 +124,6 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   };
 
   const getWalletBalances = async () => {
-    console.log(alchemyClient, 'alchemyClient');
-
     const _tokenBalance = await alchemyClient?.core?.getBalance(address);
     const _tokenBalances = await alchemyClient?.core?.getTokenBalances(address);
 
@@ -152,15 +147,12 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       name: 'Native Token',
       symbol: 'ETH',
     };
-    console.log(tokenBalancesNew, 'tokenBalancesNew');
     const newTokenBalances = [...tokenBalancesNew, nativeTokenBalance];
     setTokenBalances(newTokenBalances);
     return newTokenBalances;
   };
 
   const getWalletNfts = async () => {
-    console.log(alchemyClient, 'alchemyClient');
-
     const _nftBalances = await alchemyClient?.nft.getNftsForOwner(address);
     const formattedNftBalances = _nftBalances?.ownedNfts.map((i: any) => {
       const balance = i?.balance;

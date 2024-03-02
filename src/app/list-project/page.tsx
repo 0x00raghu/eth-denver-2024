@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchGitHubAccountByEmail, fetchGitHubRepos } from '@/utils/github';
 import GithubProjects from '@/components/_github/GithubProjects';
 import { AuthButton } from '@/components/_github/AuthButton';

@@ -47,7 +47,6 @@ const DonateModal = ({ item, isOpen, onClose, index }: any) => {
   };
 
   const handleSelectButton = async (value: string) => {
-    console.log(value, 'cvlaue');
     setSelectedCrypto(value);
   };
 
