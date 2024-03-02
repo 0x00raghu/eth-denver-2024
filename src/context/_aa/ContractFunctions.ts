@@ -2,25 +2,26 @@ import { encodeFunctionData, parseEther } from 'viem';
 import { config } from '@/constants/config';
 import { ethers } from 'ethers';
 
-const contractAddress: string = config.MAIN_CONTRACT.ADDRESS;
-const abi = config.MAIN_CONTRACT.ABI;
-
-export const createProject = (name: string, gitUrl: string) => {
+export const createProject = (name: string, gitUrl: string, chain: number) => {
+  const contractAddress: string = config.MAIN_CONTRACT(chain).ADDRESS;
+  const abi = config.MAIN_CONTRACT(chain).ABI;
   const uoCallData = encodeFunctionData({
     abi,
     functionName: 'createProject',
     args: [name, gitUrl],
   });
   console.log(uoCallData, 'uiCallData');
-  const uo = [{ target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: '0' }];
+  const uo = [{ target: contractAddress, data: uoCallData, value: '0' }];
   return { uo };
 };
 
-export const fundUSDC = (amount: number, projectNo: number) => {
+export const fundUSDC = (amount: number, projectNo: number, chain: number) => {
+  const contractAddress: string = config.MAIN_CONTRACT(chain).ADDRESS;
+  const abi = config.MAIN_CONTRACT(chain).ABI;
   const approveCallData = encodeFunctionData({
-    abi: config.USDC_CONTRACT.ABI,
+    abi: config.USDC_CONTRACT(chain).ABI,
     functionName: 'approve',
-    args: [config.MAIN_CONTRACT.ADDRESS, parseEther(`${amount}`)],
+    args: [contractAddress, parseEther(`${amount}`)],
   });
 
   const uoCallData = encodeFunctionData({
@@ -31,17 +32,19 @@ export const fundUSDC = (amount: number, projectNo: number) => {
 
   const uo = [
     {
-      target: config.USDC_CONTRACT.ADDRESS,
+      target: config.USDC_CONTRACT(chain).ADDRESS,
       data: approveCallData,
       value: '0',
     },
-    { target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: '0' },
+    { target: contractAddress, data: uoCallData, value: '0' },
   ];
 
   return { uo };
 };
 
-export const fundEth = (amount: number, projectNo: number) => {
+export const fundEth = (amount: number, projectNo: number, chain: number) => {
+  const contractAddress: string = config.MAIN_CONTRACT(chain).ADDRESS;
+  const abi = config.MAIN_CONTRACT(chain).ABI;
   console.log(amount, projectNo);
 
   const uoCallData = encodeFunctionData({
@@ -50,48 +53,46 @@ export const fundEth = (amount: number, projectNo: number) => {
     args: [projectNo],
   });
   console.log(uoCallData, 'uiCallData');
-  const uo = [{ target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: amount }];
+  const uo = [{ target: contractAddress, data: uoCallData, value: amount }];
 
   return { uo };
 };
 
-export const withdrawUSDC = (amount: number, projectNo: number) => {
+export const withdrawUSDC = (amount: number, projectNo: number, chain: number) => {
+  const contractAddress: string = config.MAIN_CONTRACT(chain).ADDRESS;
+  const abi = config.MAIN_CONTRACT(chain).ABI;
   const uoCallData = encodeFunctionData({
     abi,
     functionName: 'withdrawUSDC',
     args: [BigInt(amount), projectNo],
   });
   console.log(uoCallData, 'uiCallData');
-  const uo = [{ target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: '0' }];
+  const uo = [{ target: contractAddress, data: uoCallData, value: '0' }];
 
   return { uo };
 };
 
-export const withdrawEth = (projectNo: number) => {
+export const withdrawEth = (projectNo: number, chain: number) => {
+  const contractAddress: string = config.MAIN_CONTRACT(chain).ADDRESS;
+  const abi = config.MAIN_CONTRACT(chain).ABI;
   const uoCallData = encodeFunctionData({
     abi,
     functionName: 'withdrawEth',
     args: [projectNo],
   });
   console.log(uoCallData, 'uiCallData');
-  const uo = [{ target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: '0' }];
+  const uo = [{ target: contractAddress, data: uoCallData, value: '0' }];
 
   return { uo };
 };
 
-export const getBalance = () => {
-  const uoCallData = encodeFunctionData({
-    abi,
-    functionName: 'getBalance',
-    args: [],
-  });
-  console.log(uoCallData, 'uiCallData');
-  const uo = [{ target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: '0' }];
+export const getProjectFundInUSD = async (projectNo: number, chain: number) => {
+  console.log(projectNo, 'projectNo');
+  console.log(chain, 'chain');
 
-  return { uo };
-};
-
-export const getProjectFundInUSD = async (projectNo: number) => {
+  const contractAddress: string = config.MAIN_CONTRACT(chain).ADDRESS;
+  console.log(contractAddress, 'contractAddress');
+  const abi = config.MAIN_CONTRACT(chain).ABI;
   const contract_one: any = new ethers.Contract(contractAddress, abi, new ethers.BrowserProvider(window.ethereum));
   const result = await contract_one.getProjectFundInUSD(projectNo);
   const _ethBal: any = ethers.formatUnits(result[0], 'ether');

@@ -4,25 +4,31 @@ import ProjectCard from '@/components/_projects/project-card';
 import { useDisclosure } from '@chakra-ui/react';
 import { getProjectCreated } from '@/subgraph/index';
 import { useEffect, useState } from 'react';
+import { useWallet } from '@/context/_aa/WalletContext';
 
 const Project = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [projects, setProjects]: any = useState([]);
-  const [selectedProject, setSelectedProject] = useState(projects[0]);
+  const [selectedProject, setSelectedProject] = useState(projects?.[0]);
+  const { selectedChain } = useWallet();
 
   useEffect(() => {
     handleGetProjects();
-  }, []);
+  }, [selectedChain]);
 
   const handleGetProjects = async () => {
-    const data = await getProjectCreated();
+    console.log(selectedChain);
+
+    const data = await getProjectCreated(selectedChain.chain.id);
     console.log(data, 'getProjectCreated');
     setProjects(data);
   };
+
   const handleSelectProject = (item: any) => {
     setSelectedProject(item);
     onOpen();
   };
+
   return (
     <>
       <div className="mx-auto max-w-7xl sm:py-8 px-4 lg:px-8 ">

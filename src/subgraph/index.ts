@@ -1,31 +1,34 @@
+import { config } from '@/constants/config';
 import { fetchRepoMetaData } from '@/utils/github';
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 
-const APIURL = 'https://api.studio.thegraph.com/query/36992/crypto-lift-connect-v2/version/latest';
-
-const getProjectCreatedQuery = `
-query GetProjectCreated {
-  projectCreateds {
-    gitUrl
-    name
-    owner
-    usdcBalance
-    transactionHash
-    id
-    ethBalance
-    blockTimestamp
-    blockNumber
-  }
-}
-`;
-
-const client = new ApolloClient({
-  uri: APIURL,
-  cache: new InMemoryCache(),
-});
-
-export const getProjectCreated = async () => {
+export const getProjectCreated = async (chain: number) => {
   try {
+    const APIURL = config.graphUrl(chain);
+    console.log(chain, 'chain');
+    console.log(APIURL, 'APIURL');
+
+    const getProjectCreatedQuery = `
+    query GetProjectCreated {
+      projectCreateds {
+        gitUrl
+        name
+        owner
+        usdcBalance
+        transactionHash
+        id
+        ethBalance
+        blockTimestamp
+        blockNumber
+      }
+    }
+    `;
+
+    const client = new ApolloClient({
+      uri: APIURL,
+      cache: new InMemoryCache(),
+    });
+
     const data = await client.query({
       query: gql(getProjectCreatedQuery),
     });
