@@ -17,10 +17,7 @@ const Project = () => {
   }, [selectedChain]);
 
   const handleGetProjects = async () => {
-    console.log(selectedChain);
-
     const data = await getProjectCreated(selectedChain.chain.id);
-    console.log(data, 'getProjectCreated');
     setProjects(data);
   };
 
