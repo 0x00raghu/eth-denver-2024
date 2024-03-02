@@ -17,7 +17,7 @@ import React, { useState, useEffect } from 'react';
 import { redirect } from 'next/navigation';
 
 const CreateProjectModal = ({ item, isOpen, onClose }: any) => {
-  const { address, sendUserOperation, txnStatus, resetTxnStatus } = useWallet();
+  const { address, sendUserOperation, txnStatus, resetTxnStatus, selectedChain } = useWallet();
 
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
@@ -46,7 +46,7 @@ const CreateProjectModal = ({ item, isOpen, onClose }: any) => {
   };
 
   const handleCreateProject = async (_projectName: string, _githubUrl: string) => {
-    const { uo }: any = await createProject(_projectName, _githubUrl);
+    const { uo }: any = await createProject(_projectName, _githubUrl, selectedChain.chain.id);
     await sendUserOperation(uo);
   };
 
@@ -100,6 +100,7 @@ const CreateProjectModal = ({ item, isOpen, onClose }: any) => {
             Confirm
           </Button>
           <Button
+            isLoading={loading}
             onClick={() => {
               resetTxnStatus();
               onClose();

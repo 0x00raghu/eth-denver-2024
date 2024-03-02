@@ -31,9 +31,9 @@ export const getProjectCreated = async (chain: number) => {
     const data = await client.query({
       query: gql(getProjectCreatedQuery),
     });
+
     const response = data.data.projectCreateds;
 
-    // Use map with async function and await each fetchRepoMetaData call
     const newResponseMap = await Promise.all(
       response.map(async (_dataItem: any, i: any) => {
         const _githubMeta = await fetchRepoMetaData(_dataItem.gitUrl);
