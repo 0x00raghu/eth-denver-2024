@@ -2,7 +2,7 @@ import { encodeFunctionData, parseEther } from 'viem';
 import { config } from '@/constants/config';
 import { ethers } from 'ethers';
 
-export const createProject = (name: string, gitUrl: string, chain: string) => {
+export const createProject = (name: string, gitUrl: string, chain: number) => {
   const contractAddress: string = config.MAIN_CONTRACT(chain).ADDRESS;
   const abi = config.MAIN_CONTRACT(chain).ABI;
   const uoCallData = encodeFunctionData({
@@ -15,7 +15,7 @@ export const createProject = (name: string, gitUrl: string, chain: string) => {
   return { uo };
 };
 
-export const fundUSDC = (amount: number, projectNo: number, chain: string) => {
+export const fundUSDC = (amount: number, projectNo: number, chain: number) => {
   const contractAddress: string = config.MAIN_CONTRACT(chain).ADDRESS;
   const abi = config.MAIN_CONTRACT(chain).ABI;
   const approveCallData = encodeFunctionData({
@@ -42,7 +42,7 @@ export const fundUSDC = (amount: number, projectNo: number, chain: string) => {
   return { uo };
 };
 
-export const fundEth = (amount: number, projectNo: number, chain: string) => {
+export const fundEth = (amount: number, projectNo: number, chain: number) => {
   const contractAddress: string = config.MAIN_CONTRACT(chain).ADDRESS;
   const abi = config.MAIN_CONTRACT(chain).ABI;
   console.log(amount, projectNo);
@@ -58,7 +58,7 @@ export const fundEth = (amount: number, projectNo: number, chain: string) => {
   return { uo };
 };
 
-export const withdrawUSDC = (amount: number, projectNo: number, chain: string) => {
+export const withdrawUSDC = (amount: number, projectNo: number, chain: number) => {
   const contractAddress: string = config.MAIN_CONTRACT(chain).ADDRESS;
   const abi = config.MAIN_CONTRACT(chain).ABI;
   const uoCallData = encodeFunctionData({
@@ -72,7 +72,7 @@ export const withdrawUSDC = (amount: number, projectNo: number, chain: string) =
   return { uo };
 };
 
-export const withdrawEth = (projectNo: number, chain: string) => {
+export const withdrawEth = (projectNo: number, chain: number) => {
   const contractAddress: string = config.MAIN_CONTRACT(chain).ADDRESS;
   const abi = config.MAIN_CONTRACT(chain).ABI;
   const uoCallData = encodeFunctionData({
@@ -86,7 +86,7 @@ export const withdrawEth = (projectNo: number, chain: string) => {
   return { uo };
 };
 
-export const getProjectFundInUSD = async (projectNo: number, chain: string) => {
+export const getProjectFundInUSD = async (projectNo: number, chain: number) => {
   console.log(projectNo, 'projectNo');
   console.log(chain, 'chain');
 

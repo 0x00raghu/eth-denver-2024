@@ -22,18 +22,18 @@ const Home = () => {
 
   // Function to handle withdrawing USDC
   const handleWithdrawUSDC = async () => {
-    const { uo }: any = await withdrawUSDC(1, 0, selectedChain.chain.network);
+    const { uo }: any = await withdrawUSDC(1, 0, selectedChain.chain.id);
     await sendUserOperation(uo);
   };
 
   // Function to handle withdrawing Ethereum
   const handleWithdrawEth = async () => {
-    const { uo }: any = await withdrawEth(0, selectedChain.chain.network);
+    const { uo }: any = await withdrawEth(0, selectedChain.chain.id);
     await sendUserOperation(uo);
   };
 
   const handleGetBalanceLiveFeed = async () => {
-    const { ethBalance, usdcBalance } = await getProjectFundInUSD(0, selectedChain.chain.network);
+    const { ethBalance, usdcBalance } = await getProjectFundInUSD(0, selectedChain.chain.id);
     console.log(ethBalance, usdcBalance);
   };
 

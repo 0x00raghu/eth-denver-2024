@@ -1000,8 +1000,8 @@ const chainConfig = [
 
 const arbitrumConfig = {
   usdc: '0x0c86A754A29714C4Fe9C6F1359fa7099eD174c0b',
-  nft: '',
-  main: '',
+  nft: '0x54fC2bEcfe4f552Fe516350a3078e14c86e045fA',
+  main: '0x81ab54a29985de453602197682132a2a8e904c7d',
 };
 
 const baseConfig = {
@@ -1010,18 +1010,24 @@ const baseConfig = {
   main: '0x1127ac9A60f5ef63dD40c3fb660bCE67020cfEa5',
 };
 
+const graphUrls: any = {
+  84532: 'https://api.studio.thegraph.com/query/67099/gitfund-base/version/latest',
+  421614: 'https://api.studio.thegraph.com/query/67099/gitfund-arbitrum/version/latest',
+};
+
 export const config = {
-  MAIN_CONTRACT: (chain: string) => ({
+  MAIN_CONTRACT: (chain: number) => ({
     ABI: MAIN_CONTRACT_ABI,
-    ADDRESS: chain === 'base-sepolia' ? baseConfig.main : arbitrumConfig.main,
+    ADDRESS: chain === 84532 ? baseConfig.main : arbitrumConfig.main,
   }),
-  NFT_CONTRACT: (chain: string) => ({
+  NFT_CONTRACT: (chain: number) => ({
     ABI: NFT_CONTRACT_ABI,
-    ADDRESS: chain === 'base-sepolia' ? baseConfig.nft : arbitrumConfig.nft,
+    ADDRESS: chain === 84532 ? baseConfig.nft : arbitrumConfig.nft,
   }),
-  USDC_CONTRACT: (chain: string) => ({
+  USDC_CONTRACT: (chain: number) => ({
     ABI: USDC_CONTRACT_ABI,
-    ADDRESS: chain === 'base-sepolia' ? baseConfig.usdc : arbitrumConfig.usdc,
+    ADDRESS: chain === 84532 ? baseConfig.usdc : arbitrumConfig.usdc,
   }),
   chainConfig,
+  graphUrl: (chain: number) => graphUrls[chain],
 };
