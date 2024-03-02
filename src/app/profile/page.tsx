@@ -1,7 +1,6 @@
 'use client';
 import { useEffect } from 'react';
 import { useWallet } from '@/context/_aa/WalletContext';
-import DynamicReactTable from '@/utils/table';
 import { getProjectFundInUSD, withdrawUSDC, withdrawEth } from '@/context/_aa/ContractFunctions'; // Import the additional contract functions
 import { ArrowDownIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 import { openTransak } from '@/components/_onramp/transak';
