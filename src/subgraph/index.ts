@@ -1,4 +1,5 @@
 import { config } from '@/constants/config';
+import { getProjectFundInUSD } from '@/context/_aa/ContractFunctions';
 import { fetchRepoMetaData } from '@/utils/github';
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 
@@ -37,9 +38,10 @@ export const getProjectCreated = async (chain: number) => {
 
     // Use map with async function and await each fetchRepoMetaData call
     const newResponseMap = await Promise.all(
-      response.map(async (_dataItem: any) => {
+      response.map(async (_dataItem: any, i: any) => {
         const _githubMeta = await fetchRepoMetaData(_dataItem.gitUrl);
-        return { ..._dataItem, _githubMeta };
+        const livePrices = await getProjectFundInUSD(i, chain);
+        return { ..._dataItem, _githubMeta, livePrices };
       }),
     );
 

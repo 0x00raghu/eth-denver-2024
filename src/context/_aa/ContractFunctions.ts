@@ -97,7 +97,7 @@ export const getProjectFundInUSD = async (projectNo: number, chain: number) => {
   const result = await contract_one.getProjectFundInUSD(projectNo);
   const _ethBal: any = ethers.formatUnits(result[0], 'ether');
   const _usdcBal: any = ethers.formatUnits(result[1], 'ether');
-  const ethBalance = _ethBal / Math.pow(10, 8);
-  const usdcBalance = _usdcBal / Math.pow(10, 8);
+  const ethBalance = (_ethBal / Math.pow(10, 8)).toFixed(2);
+  const usdcBalance = (_usdcBal / Math.pow(10, 8)).toFixed(2);
   return { ethBalance, usdcBalance };
 };
