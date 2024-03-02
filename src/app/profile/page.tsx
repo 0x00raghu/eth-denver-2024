@@ -8,7 +8,7 @@ import { openTransak } from '@/components/_onramp/transak';
 import { useEffect } from 'react';
 
 const Home = () => {
-  const { address, sendUserOperation, tokenBalances, getWalletBalances } = useWallet();
+  const { address, sendUserOperation, tokenBalances, getWalletBalances, provider } = useWallet();
 
   const handleGetBalances = async () => {
     const balances = await getWalletBalances();
@@ -22,25 +22,25 @@ const Home = () => {
 
   // Function to handle withdrawing USDC
   const handleWithdrawUSDC = async () => {
-    const { uo }: any = await withdrawUSDC(1, 0); // Adjust arguments as needed
+    const { uo }: any = await withdrawUSDC(1, 0);
     await sendUserOperation(uo);
   };
 
   // Function to handle withdrawing Ethereum
   const handleWithdrawEth = async () => {
-    const { uo }: any = await withdrawEth(0); // Adjust arguments as needed
+    const { uo }: any = await withdrawEth(0);
     await sendUserOperation(uo);
   };
 
   // Function to handle getting balance
   const handleGetBalance = async () => {
-    const { uo }: any = await getBalance(); // Adjust arguments as needed
+    const { uo }: any = await getBalance();
     await sendUserOperation(uo);
   };
 
   const handleGetBalanceLiveFeed = async () => {
-    const { uo }: any = await getProjectFundInUSD(0); // Adjust arguments as needed
-    await sendUserOperation(uo);
+    const { ethBalance, usdcBalance } = await getProjectFundInUSD(0);
+    console.log(ethBalance, usdcBalance);
   };
 
   return (

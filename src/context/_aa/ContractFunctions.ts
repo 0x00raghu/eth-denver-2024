@@ -1,5 +1,6 @@
 import { encodeFunctionData, parseEther } from 'viem';
 import { config } from '@/constants/config';
+import { ethers } from 'ethers';
 
 const contractAddress: string = config.MAIN_CONTRACT.ADDRESS;
 const abi = config.MAIN_CONTRACT.ABI;
@@ -90,14 +91,12 @@ export const getBalance = () => {
   return { uo };
 };
 
-export const getProjectFundInUSD = (projectNo: number) => {
-  const uoCallData = encodeFunctionData({
-    abi,
-    functionName: 'getProjectFundInUSD',
-    args: [projectNo],
-  });
-  console.log(uoCallData, 'uiCallData');
-  const uo = [{ target: config.MAIN_CONTRACT.ADDRESS, data: uoCallData, value: '0' }];
-
-  return { uo };
+export const getProjectFundInUSD = async (projectNo: number) => {
+  const contract_one: any = new ethers.Contract(contractAddress, abi, new ethers.BrowserProvider(window.ethereum));
+  const result = await contract_one.getProjectFundInUSD(projectNo);
+  const _ethBal: any = ethers.formatUnits(result[0], 'ether');
+  const _usdcBal: any = ethers.formatUnits(result[1], 'ether');
+  const ethBalance = _ethBal / Math.pow(10, 8);
+  const usdcBalance = _usdcBal / Math.pow(10, 8);
+  return { ethBalance, usdcBalance };
 };
