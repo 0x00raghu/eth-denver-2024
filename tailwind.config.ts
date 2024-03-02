@@ -23,7 +23,7 @@ const config: Config = {
       footerlinks: "rgba(54, 54, 54, 0.9)",
       bordertop: "rgba(105, 120, 131, 0.16)",
       darkgrey: "rgba(44, 9, 11, 0.8)",
-      Blueviolet: "#6556FF",
+      blueviolet: "#6556FF",
       semiblueviolet: "rgba(101, 86, 255, 0.15)",
       midnightblue: "#222C44",
       kellygreen: "#43C639",

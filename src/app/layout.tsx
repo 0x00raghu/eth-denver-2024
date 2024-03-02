@@ -6,6 +6,7 @@ import Navbar from '@/components/_navbar/index';
 import { WalletProvider } from '@/context/_aa/WalletContext';
 import { getServerSession } from 'next-auth/next';
 import SessionProvider from '@/components/_github/SessionProvider';
+import Footer from '@/components/_navbar/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,6 +29,7 @@ export default async function RootLayout({
           <SessionProvider session={session}>
             <Navbar />
             <Providers>{children}</Providers>
+            <Footer />
           </SessionProvider>
         </WalletProvider>
       </body>
