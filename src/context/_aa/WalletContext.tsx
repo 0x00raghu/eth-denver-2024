@@ -119,7 +119,6 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
 
   const getTokenMetaData = async (tokenAddress: string) => {
     const tokenMetaData = await alchemyClient?.core?.getTokenMetadata(tokenAddress);
-    console.log(tokenMetaData, 'tokenMetaData');
     return tokenMetaData;
   };
 

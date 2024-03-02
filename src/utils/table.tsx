@@ -5,7 +5,6 @@ const DynamicReactTable = ({ data }: any) => {
   return (
     <TableContainer>
       <Table variant="simple">
-        <TableCaption>Imperial to metric conversion factors</TableCaption>
         <Thead>
           <Tr>
             {Object.keys(data[0]).map((key) => (

@@ -1,46 +1,59 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useWallet } from '@/context/_aa/WalletContext';
-import { getProjectFundInUSD, withdrawUSDC, withdrawEth } from '@/context/_aa/ContractFunctions'; // Import the additional contract functions
 import { ArrowDownIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 import { openTransak } from '@/components/_onramp/transak';
 import { ArrowTopRightOnSquareIcon, ArrowUpIcon } from '@heroicons/react/20/solid';
+import { getProjectCreated } from '@/subgraph';
+import WithdrawModal from '@/components/_projects/withdraw-modal';
+import { Button, Code, useDisclosure } from '@chakra-ui/react';
 
 const Home = () => {
   const { address, sendUserOperation, tokenBalances, getWalletBalances, selectedChain, getWalletNfts, nftBalances } = useWallet();
+  const [projects, setProjects]: any = useState([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedProject, setSelectedProject] = useState(projects?.[0]);
 
   const handleGetBalances = async () => {
     await getWalletBalances();
     await getWalletNfts();
   };
 
+  const handleGetProjects = async () => {
+    if (address) {
+      const data = await getProjectCreated(selectedChain.chain.id);
+      const _selfProjects = data
+        ?.map((i: any) => {
+          const lowercaseAddress = address?.toLowerCase() || '';
+          const lowercaseOwner = i.owner.toLowerCase();
+          if (lowercaseOwner === lowercaseAddress) {
+            const name = i.name;
+            const ethBalance = i.livePrices.ethBalance;
+            const usdcBalance = i.livePrices.usdcBalance;
+            return { name, ethBalance, usdcBalance };
+          }
+          return null;
+        })
+        .filter(Boolean);
+      setProjects(_selfProjects);
+    }
+  };
+  const handleSelectProject = (item: any) => {
+    setSelectedProject(item);
+    onOpen();
+  };
+
   useEffect(() => {
     handleGetBalances();
-  }, [address]);
-
-  // Function to handle withdrawing USDC
-  const handleWithdrawUSDC = async () => {
-    const { uo }: any = await withdrawUSDC(1, 0, selectedChain.chain.id);
-    await sendUserOperation(uo);
-  };
-
-  // Function to handle withdrawing Ethereum
-  const handleWithdrawEth = async () => {
-    const { uo }: any = await withdrawEth(0, selectedChain.chain.id);
-    await sendUserOperation(uo);
-  };
-
-  const handleGetBalanceLiveFeed = async () => {
-    const { ethBalance, usdcBalance } = await getProjectFundInUSD(0, selectedChain.chain.id);
-    console.log(ethBalance, usdcBalance);
-  };
+    handleGetProjects();
+  }, [selectedChain.chain.id, address]);
 
   return (
     <>
       <div className="app-container app-theme-white flex flex-col w-full text-gray-700 bg-white">
-        <section className="">
-          <div className="">
-            <div className="">
+        <section>
+          <div>
+            <div>
               <div className="mx-auto max-w-7xl pb-10 lg:py-6  w-full">
                 <div className="sm:flex sm:items-center w-full">
                   <div className="sm:flex-auto w-full">
@@ -228,7 +241,6 @@ const Home = () => {
                       </div>
                     </section>
                   </div>
-                  
                 </div>
               </div>
             </div>
@@ -236,22 +248,26 @@ const Home = () => {
         </section>
 
         <div className="max-w-7xl mx-auto border p-4 rounded-lg w-full mt-4">
-          <h2 className="leading-6 text-xl font-bold font-sans text-gray-900 py-10 ">With Draw Functions</h2>
-          <div className="flex text-white flex-row  gap-2 w-1/2  ">
-            <button
-              onClick={handleWithdrawUSDC}
-              className="flex border w-full h-full  border-black justify-center rounded-lg text-xl font-medium items-center py-5 px-10 text-black hover:text-white hover:bg-black"
-            >
-              Withdraw USDC
-            </button>
-
-            <button
-              onClick={handleWithdrawEth}
-              className="flex border w-full  h-full   border-black justify-center rounded-lg text-xl font-medium items-center py-5 px-10 text-black hover:text-white hover:bg-black"
-            >
-              Withdraw Eth
-            </button>
-          </div>
+          <h2 className="leading-6 text-xl font-bold font-sans text-gray-900 py-10 ">Your Projects</h2>
+          <ul role="list" className="divide-y divide-gray-100">
+            {projects &&
+              projects.map((project: any) => (
+                <li key={project.name} className="flex items-center justify-between gap-x-6 py-5">
+                  <div className="min-w-0">
+                    <div className="flex items-start gap-x-3">
+                      <p className="text-sm font-semibold leading-6 text-gray-900">{project.name}</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-none items-center gap-x-4">
+                    <Button backgroundColor={'black'} color={'white'} onClick={() => handleSelectProject(project)}>
+                      Withdraw
+                    </Button>
+                  </div>
+                </li>
+              ))}
+          </ul>
+          {projects.length === 0 && <span className="py-4 m-auto">No data</span>}
+          {isOpen && <WithdrawModal item={selectedProject} onClose={onClose} isOpen={isOpen} />}
         </div>
       </div>
     </>
