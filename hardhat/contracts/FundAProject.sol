@@ -2,8 +2,8 @@
 pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./FundAProjectContributorNFT.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import "./FundAProjectContributorNFT.sol";
 
 contract FundAProject {
     address payable public owner;
@@ -85,6 +85,7 @@ contract FundAProject {
         );
 
         usdcToken.transfer(msg.sender, projects[projectNo].usdcBalance);
+        projects[projectNo].usdcBalance = 0;
         emit USDCWithdrawn(projects[projectNo].usdcBalance, projectNo);
     }
 
@@ -95,6 +96,7 @@ contract FundAProject {
         );
 
         payable(msg.sender).transfer(projects[projectNo].ethBalance);
+        projects[projectNo].ethBalance = 0;
         emit EthWithdrawn(projects[projectNo].ethBalance, projectNo);
     }
 

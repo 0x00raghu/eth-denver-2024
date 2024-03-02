@@ -1,99 +1,56 @@
 'use client';
-import { Disclosure } from '@headlessui/react';
 import Link from 'next/link';
 import React from 'react';
-import { Bars3Icon } from '@heroicons/react/24/outline';
-import Drawer from './Drawer';
-import Drawerdata from './Drawerdata';
-import Image from 'next/image';
 import { useWallet } from '@/context/_aa/WalletContext';
-import { Code } from '@chakra-ui/react';
-
-interface NavigationItem {
-  name: string;
-  href: string;
-  current: boolean;
-}
-
-const navigation: NavigationItem[] = [
-  { name: 'Profile', href: '/profile', current: false },
-  { name: 'List Project', href: '/list-project', current: false },
-  { name: 'Projects', href: '/projects', current: false },
-];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { Select } from '@chakra-ui/react';
 
 const Navbar = () => {
   const { isAuthenticated, address, connectWallet } = useWallet();
-  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <Disclosure as="nav" className="navbar">
-      <>
-        <div className="mx-auto max-w-7xl p-3 md:p-6 lg:px-8">
-          <div className="relative flex h-12 sm:h-20 items-center">
-            <div className="flex flex-1 items-center sm:justify-between">
-              {/* LOGO */}
+    <>
+      <section className="w-full px-8 text-gray-700 bg-white">
+        <div className="container flex flex-col flex-wrap items-center justify-between py-5 mx-auto md:flex-row max-w-7xl">
+          <div className="relative flex flex-col md:flex-row">
+            <Link href="/" className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0">
+              <span className="mx-auto text-xl font-black leading-none text-gray-900 select-none">
+                Gitfund
+                <span className="text-indigo-600">.</span>
+              </span>
+            </Link>
+            <nav className="flex flex-wrap items-center mb-5 text-base md:mb-0 md:pl-8 md:ml-8 md:border-l md:border-gray-200">
+              <Link href="/projects" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+                Discover
+              </Link>
 
-              <div className="flex sm:hidden flex-shrink-0 items-center border-right">
-                <Image src="/images/_logo/Logo.svg" alt="logo" width={36} height={36} />
-                <Link href="/" className="text-2xl font-semibold text-black ml-4">
-                  CryptoLiftConnect
-                </Link>
-              </div>
-              <div className="hidden sm:flex flex-shrink-0 items-center border-right">
-                <Image src="/images/_logo/Logo.svg" alt="logo" width={56} height={56} />
-                <Link href="/" className="text-2xl font-semibold text-black ml-4">
-                  CryptoLiftConnect
-                </Link>
-              </div>
-
-              {/* LINKS */}
-
-              <div className="hidden lg:flex items-center border-right ">
-                <div className="flex justify-end space-x-4">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className={classNames(
-                        item.current ? 'bg-black' : 'navlinks hover:opacity-100',
-                        'px-3 py-4 rounded-md text-lg font-normal opacity-50 hover:text-black space-links',
-                      )}
-                      aria-current={item.href ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-              <div className="gap-6 hidden lg:flex">
-                {isAuthenticated ? (
-                  <Code colorScheme="yellow">{address}</Code>
-                ) : (
-                  <button
-                    onClick={connectWallet}
-                    className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
-                  >
-                    Connect Wallet
-                  </button>
-                )}
-              </div>
-            </div>
-
-            <div className="block lg:hidden">
-              <Bars3Icon className="block h-6 w-6" aria-hidden="true" onClick={() => setIsOpen(true)} />
-            </div>
-
-            <Drawer isOpen={isOpen} setIsOpen={setIsOpen}>
-              <Drawerdata />
-            </Drawer>
+              <Link href="/list-project" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+                Submit a Project
+              </Link>
+              <Link href="/profile" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+                My Profile
+              </Link>
+            </nav>
           </div>
+
+          <div className="">
+            <Select placeholder="Select option">
+              <option value="option1">Base</option>
+              <option value="option2">Arbitrum</option>
+              <option value="option3">Option 3</option>
+            </Select>
+          </div>
+          {true && (
+            <button
+              disabled={address ? true : false}
+              onClick={connectWallet}
+              className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              {address ? `Connected to: ${address}` : 'Connect Wallet'}
+            </button>
+          )}
         </div>
-      </>
-    </Disclosure>
+      </section>
+    </>
   );
 };
 
