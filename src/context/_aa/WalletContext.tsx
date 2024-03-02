@@ -22,6 +22,8 @@ interface WalletContextType {
   sendUserOperation: (uo: [uo]) => Promise<void>;
   getWalletBalances: () => Promise<any>;
   tokenBalances: any[];
+  getWalletNfts: () => Promise<any>;
+  nftBalances: any[];
   txnStatus: string | null;
   resetTxnStatus: () => Promise<void>;
   selectedChain: any;
@@ -48,6 +50,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [address, setAddress] = useState<string>('');
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [tokenBalances, setTokenBalances] = useState<any>([]);
+  const [nftBalances, setNftBalances] = useState<any>([]);
   const [txnStatus, setTxnStatus] = useState<string | null>(null);
   const [selectedChain, setSelectedChain]: any = useState(config.chainConfig[0]);
 
@@ -124,6 +127,8 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   };
 
   const getWalletBalances = async () => {
+    console.log(alchemyClient, 'alchemyClient');
+
     const _tokenBalances = await alchemyClient?.core?.getTokenBalances(address);
 
     const promises = await _tokenBalances?.tokenBalances.map(async (item: any) => {
@@ -140,6 +145,23 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     const tokenBalancesNew = await Promise.all(promises);
     setTokenBalances(tokenBalancesNew);
     return tokenBalancesNew;
+  };
+
+  const getWalletNfts = async () => {
+    console.log(alchemyClient, 'alchemyClient');
+
+    const _nftBalances = await alchemyClient?.nft.getNftsForOwner(address);
+    const formattedNftBalances = _nftBalances?.ownedNfts.map((i: any) => {
+      const balance = i?.balance;
+      const name = i?.contract?.name;
+      const address = i?.contract?.address;
+      const mintAddress = i?.mint?.mintAddress;
+      const tokenType = i?.tokenType;
+      const tokenId = i?.tokenId;
+      return { name, address, mintAddress, tokenType, balance, tokenId };
+    });
+    setNftBalances(formattedNftBalances);
+    return formattedNftBalances;
   };
 
   const resetTxnStatus = async () => {
@@ -164,6 +186,8 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         resetTxnStatus,
         setSelectedChain,
         selectedChain,
+        nftBalances,
+        getWalletNfts,
       }}
     >
       {children}
