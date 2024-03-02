@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import ProjectCard from '@/components/_projects/project-card';
-import { useDisclosure } from '@chakra-ui/react';
+import { Button, useDisclosure } from '@chakra-ui/react';
 import { getProjectCreated } from '@/subgraph/index';
 import { useEffect, useState } from 'react';
 import { useWallet } from '@/context/_aa/WalletContext';
@@ -17,10 +17,8 @@ const Project = () => {
   }, [selectedChain]);
 
   const handleGetProjects = async () => {
-    console.log(selectedChain);
-
     const data = await getProjectCreated(selectedChain.chain.id);
-    console.log(data, 'getProjectCreated');
+    console.log(data, 'projects', selectedChain.chain.name);
     setProjects(data);
   };
 
@@ -34,6 +32,8 @@ const Project = () => {
       <div className="mx-auto max-w-7xl sm:py-8 px-4 lg:px-8 ">
         <div className="sm:flex justify-between items-center">
           <h3 className="text-midnightblue text-4xl lg:text-55xl font-semibold mb-5 sm:mb-0">Discover projects</h3>
+          <Button onClick={handleGetProjects}> Refresh</Button>
+
           <Link href={'/list-project'} className="text-blue-500 text-lg font-medium space-links font-mono">
             List Your Project&nbsp;&gt;&nbsp;
           </Link>

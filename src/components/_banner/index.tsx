@@ -2,10 +2,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-// impport svg in the next/image
-import bgcode from '../../assets/logo.svg';
-import hero from '../../assets/hero.svg';
-
 const Banner = () => {
   return (
     <section className="px-2 py-20 bg-white md:px-0">

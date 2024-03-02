@@ -22,34 +22,53 @@ import { ButtonGroups } from './button-groups';
 const DonateModal = ({ item, isOpen, onClose, index }: any) => {
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
-  const { address, sendUserOperation, txnStatus, resetTxnStatus } = useWallet();
+  const { sendUserOperation, txnStatus, resetTxnStatus, selectedChain } = useWallet();
   const [selectedCrypto, setSelectedCrypto]: any = useState(null);
   const [selectedAmount, setSelectedAmount]: any = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFundUSDC = async () => {
-    const { uo }: any = await fundUSDC(selectedAmount, index);
+    const { uo }: any = await fundUSDC(selectedAmount, index, selectedChain.chain.id);
     await sendUserOperation(uo);
   };
 
   // Function to handle funding Ethereum
   const handleFundEth = async () => {
-    const { uo }: any = await fundEth(selectedAmount, index); // Adjust arguments as needed
+    const { uo }: any = await fundEth(selectedAmount, index, selectedChain.chain.id); // Adjust arguments as needed
     await sendUserOperation(uo);
   };
 
   const handleConfirm = async () => {
     if (selectedCrypto === 'USDC') {
-      handleFundUSDC();
+      await handleFundUSDC();
     }
     if (selectedCrypto === 'ETH') {
-      handleFundEth();
+      await handleFundEth();
     }
   };
 
+  const handleSubmit = async (e: any) => {
+    setLoading(true);
+    e.preventDefault();
+    console.log(selectedAmount, selectedCrypto, index);
+    await handleConfirm();
+    setLoading(false);
+    setTimeout(() => {
+      resetTxnStatus();
+    }, 2000);
+  };
+
   const handleSelectButton = async (value: string) => {
-    console.log(value, 'cvlaue');
     setSelectedCrypto(value);
   };
+
+  useEffect(() => {
+    console.log(loading, txnStatus);
+
+    if (txnStatus === 'completed') {
+      onClose();
+    }
+  }, [txnStatus]);
 
   return (
     <Modal size={'lg'} isCentered initialFocusRef={initialRef} finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
@@ -90,10 +109,25 @@ const DonateModal = ({ item, isOpen, onClose, index }: any) => {
         </ModalBody>
 
         <ModalFooter>
-          <Button borderColor="green.500" mr={3} onClick={handleConfirm}>
+          <Button
+            colorScheme="blue"
+            mr={3}
+            spinnerPlacement="start"
+            onClick={handleSubmit}
+            isLoading={loading}
+            loadingText={txnStatus === 'started' ? 'txn submitting...' : txnStatus === 'initiated' ? 'completing txn ...' : 'Successfully Completed'}
+          >
             Confirm
           </Button>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button
+            isLoading={loading}
+            onClick={() => {
+              resetTxnStatus();
+              onClose();
+            }}
+          >
+            Cancel
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

@@ -1,21 +1,18 @@
 'use client';
-import Image from 'next/image';
+import { useEffect } from 'react';
 import { useWallet } from '@/context/_aa/WalletContext';
 import DynamicReactTable from '@/utils/table';
 import { getProjectFundInUSD, withdrawUSDC, withdrawEth } from '@/context/_aa/ContractFunctions'; // Import the additional contract functions
 import { ArrowDownIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 import { openTransak } from '@/components/_onramp/transak';
-import { useEffect } from 'react';
 import { ArrowTopRightOnSquareIcon, ArrowUpIcon } from '@heroicons/react/20/solid';
 
 const Home = () => {
   const { address, sendUserOperation, tokenBalances, getWalletBalances, selectedChain, getWalletNfts, nftBalances } = useWallet();
 
   const handleGetBalances = async () => {
-    const _balances = await getWalletBalances();
-    const _nfts = await getWalletNfts();
-    console.log(_balances, '_balances');
-    console.log(_nfts, '_nfts');
+    await getWalletBalances();
+    await getWalletNfts();
   };
 
   useEffect(() => {

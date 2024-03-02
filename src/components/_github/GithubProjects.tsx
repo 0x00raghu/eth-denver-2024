@@ -1,5 +1,5 @@
 import { Button, Code, useDisclosure } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import CreateProjectModal from '@/components/_projects/create-project-modal';
 import { classNames } from '@/utils/functions';
 
