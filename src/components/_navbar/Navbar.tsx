@@ -2,10 +2,11 @@
 import Link from 'next/link';
 import React from 'react';
 import { useWallet } from '@/context/_aa/WalletContext';
-import { Select } from '@chakra-ui/react';
+import SelectDropDown from './SelectDropDown';
+import { config } from '@/constants/config';
 
 const Navbar = () => {
-  const { isAuthenticated, address, connectWallet } = useWallet();
+  const { isAuthenticated, address, connectWallet, selectedChain, setSelectedChain } = useWallet();
 
   return (
     <>
@@ -32,12 +33,8 @@ const Navbar = () => {
             </nav>
           </div>
 
-          <div className="">
-            <Select placeholder="Select option">
-              <option value="option1">Base</option>
-              <option value="option2">Arbitrum</option>
-              <option value="option3">Option 3</option>
-            </Select>
+          <div>
+            <SelectDropDown selected={selectedChain} setSelected={setSelectedChain} chainConfig={config.chainConfig} />
           </div>
           {true && (
             <button

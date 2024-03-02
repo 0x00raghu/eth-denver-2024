@@ -1,11 +1,12 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { createModularAccountAlchemyClient } from '@alchemy/aa-alchemy';
 import { createWalletClient, custom, parseEther } from 'viem';
-import { baseSepolia, WalletClientSigner } from '@alchemy/aa-core';
+import { WalletClientSigner } from '@alchemy/aa-core';
 import { Alchemy, Network } from 'alchemy-sdk';
 import _ from 'lodash';
+import { config } from '@/constants/config';
 
 type uo = {
   target: string;
@@ -23,6 +24,8 @@ interface WalletContextType {
   tokenBalances: any[];
   txnStatus: string | null;
   resetTxnStatus: () => Promise<void>;
+  selectedChain: any;
+  setSelectedChain: any;
 }
 
 interface WalletProviderProps {
@@ -46,10 +49,13 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [tokenBalances, setTokenBalances] = useState<any>([]);
   const [txnStatus, setTxnStatus] = useState<string | null>(null);
+  const [selectedChain, setSelectedChain]: any = useState(config.chainConfig[0]);
 
   const connectWallet = async () => {
+    console.log(selectedChain.chain, 'selectedChain');
+
     console.log('connectWallet: ', connectWallet);
-    const chain = baseSepolia;
+    const chain = selectedChain.chain;
     const client: any = createWalletClient({
       chain,
       transport: custom(window.ethereum),
@@ -75,6 +81,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     setProvider(alchemyProvider);
     setAddress(alchemyProvider.getAddress());
     setIsAuthenticated(true);
+    console.log('Successfully Connected to :', alchemyProvider.getAddress(), 'on', chain.name);
   };
 
   const sendUserOperation = async (params: [uo]) => {
@@ -139,9 +146,25 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     setTxnStatus(null);
   };
 
+  useEffect(() => {
+    connectWallet();
+  }, [selectedChain]);
+
   return (
     <WalletContext.Provider
-      value={{ provider, address, isAuthenticated, connectWallet, sendUserOperation, getWalletBalances, tokenBalances, txnStatus, resetTxnStatus }}
+      value={{
+        provider,
+        address,
+        isAuthenticated,
+        connectWallet,
+        sendUserOperation,
+        getWalletBalances,
+        tokenBalances,
+        txnStatus,
+        resetTxnStatus,
+        setSelectedChain,
+        selectedChain,
+      }}
     >
       {children}
     </WalletContext.Provider>
