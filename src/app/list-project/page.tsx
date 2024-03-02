@@ -24,7 +24,7 @@ const ListProject = () => {
   }, [session?.user?.email]);
 
   return (
-    <div className="mx-auto max-w-7xl sm:py-8 px-4 lg:px-8 ">
+    <div className="mx-auto max-w-7xl sm:py-8 px-4 lg:px-8 min-h-screen ">
       <AuthButton />
       {repos && repos.length > 0 && <GithubProjects data={repos} />}
     </div>
