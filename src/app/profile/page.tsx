@@ -8,6 +8,7 @@ import { getProjectCreated } from '@/subgraph';
 import WithdrawModal from '@/components/_projects/withdraw-modal';
 import { Button, Code, useDisclosure } from '@chakra-ui/react';
 
+
 const Home = () => {
   const { address, sendUserOperation, tokenBalances, getWalletBalances, selectedChain, getWalletNfts, nftBalances } = useWallet();
   const [projects, setProjects]: any = useState([]);
@@ -102,7 +103,7 @@ const Home = () => {
                               <div>
                                 <div>
                                   <h2 className="leading-6 text-xl font-semibold text-gray-900 font-sans  lg:-mx-2">Balance</h2>
-                                  <div className="bg-gray-50 px-4 text-right sm:px-6 -my-4">
+                                  <div className=" px-4 text-right sm:px-6 -my-4">
                                     <button type="submit" className="uppercase inline-flex text-blue-600 hover:text-orange-900">
                                       {' '}
                                       View All
@@ -136,8 +137,8 @@ const Home = () => {
                                             {tokenBalances.length > 0 &&
                                               tokenBalances.map((transaction: any, i) => (
                                                 <tr key={i}>
-                                                  <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-6">
-                                                    {transaction?.symbol || ''}
+                                                  <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-6 flex items-center gap-3">
+                                                  {  <button className={`w-8 h-8  text-white bg-gradient-to-r from-cyan-500  to-gold rounded-full border-slate-400 focus:outline-none`}></button> } { transaction?.symbol || ''}
                                                   </td>
                                                   <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900">
                                                     {transaction.amount || ''}
@@ -179,7 +180,7 @@ const Home = () => {
                           <div>
                             <div>
                               <h2 className="leading-6 text-xl font-semibold text-gray-900 font-sans  ">NFT Balance</h2>
-                              <div className="bg-gray-50 px-4 text-right sm:px-6 -my-4">
+                              <div className=" px-4 text-right sm:px-6 -my-4">
                                 <button type="submit" className="uppercase inline-flex text-blue-600 hover:text-orange-900">
                                   {' '}
                                   View All
@@ -219,8 +220,8 @@ const Home = () => {
                                         {nftBalances.length > 0 &&
                                           nftBalances.map((transaction: any, i) => (
                                             <tr key={i}>
-                                              <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-6">
-                                                {transaction?.name || ''}
+                                              <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-6 flex items-center gap-3">
+                                              {  <button className={`w-8 h-8  text-white bg-gradient-to-r from-cyan-500  to-green-500 rounded-full border-slate-400 focus:outline-none`}></button> }{transaction?.name || ''}
                                               </td>
                                               <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900">
                                                 {transaction.address || ''}
