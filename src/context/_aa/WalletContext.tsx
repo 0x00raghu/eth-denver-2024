@@ -129,6 +129,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const getWalletBalances = async () => {
     console.log(alchemyClient, 'alchemyClient');
 
+    const _tokenBalance = await alchemyClient?.core?.getBalance(address);
     const _tokenBalances = await alchemyClient?.core?.getTokenBalances(address);
 
     const promises = await _tokenBalances?.tokenBalances.map(async (item: any) => {
@@ -137,14 +138,24 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         const amount = item.tokenBalance / Math.pow(10, metaData.decimals);
         item.amount = amount.toFixed(2);
         delete item.tokenBalance;
-        item.viewURL = `https://sepolia.basescan.org/address/${address}#tokentxns`;
+        delete metaData.logo;
       }
       return { ...item, ...metaData };
     });
 
     const tokenBalancesNew = await Promise.all(promises);
-    setTokenBalances(tokenBalancesNew);
-    return tokenBalancesNew;
+
+    const nativeTokenBalance = {
+      contractAddress: '0x00000000000000000000000000',
+      amount: (parseInt(BigInt(_tokenBalance?._hex).toString()) / Math.pow(10, 18)).toFixed(2),
+      decimals: 18,
+      name: 'Native Token',
+      symbol: 'ETH',
+    };
+    console.log(tokenBalancesNew, 'tokenBalancesNew');
+    const newTokenBalances = [...tokenBalancesNew, nativeTokenBalance];
+    setTokenBalances(newTokenBalances);
+    return newTokenBalances;
   };
 
   const getWalletNfts = async () => {
