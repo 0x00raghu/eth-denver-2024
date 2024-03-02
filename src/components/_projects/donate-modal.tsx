@@ -12,7 +12,6 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Code,
   Badge,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
@@ -69,7 +68,7 @@ const DonateModal = ({ item, isOpen, onClose, index }: any) => {
           <FormControl>
             <FormLabel>Crypto</FormLabel>
 
-            <ButtonGroups handleSelectButton={handleSelectButton} />
+            <ButtonGroups className="bg-black" handleSelectButton={handleSelectButton} />
           </FormControl>
 
           <FormControl mt={4}>
@@ -91,7 +90,7 @@ const DonateModal = ({ item, isOpen, onClose, index }: any) => {
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={handleConfirm}>
+          <Button borderColor="green.500" mr={3} onClick={handleConfirm}>
             Confirm
           </Button>
           <Button onClick={onClose}>Cancel</Button>

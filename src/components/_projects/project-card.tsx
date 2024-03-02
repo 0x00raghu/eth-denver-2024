@@ -10,62 +10,47 @@ const ProjectCard = ({ item, isOpen, handleSelectProject, onClose, selectedProje
 
   return (
     <div className="w-full max-w-xl">
-      <div className="bg-white m-3 px-3 pt-3 pb-12 my-20 shadow-courses rounded-2xl">
-        <div className="relative rounded-3xl">
-          <Image src={'/images/_courses/courseone.png'} alt="gaby" width={389} height={262} className="m-auto clipPath" />
-          <div className="absolute right-5 -bottom-2 bg-ultramarine rounded-full p-6">
-            <h3 className="text-white uppercase text-center text-sm font-medium">
-              best <br /> seller
-            </h3>
-          </div>
-        </div>
-
+      <div className="bg-white border m-3 px-3 pt-3 pb-12 my-20  rounded-lg">
         <div className="px-3">
+        <Code>{item?._githubMeta?.visibility}</Code>
           <h4 className="text-2xl font-bold pt-6 text-black">{item.name}</h4>
-          <h4 className="text-2xl font-bold pt-1 text-black">{item.html_url}</h4>
+          <h4 className="text-2xl font-bold pt-1 text-black font-mono">{item.html_url}</h4>
           <div>
-            <h3 className="text-base font-normal pt-6 opacity-75">{item.owner}</h3>
+            <h3 className="text-base font-normal pt-1 opacity-75 font-mono">{item.owner}</h3>
           </div>
-          <div className="flex justify-between item-center py-6">
+          <div className="relative rounded-3xl  py-4">
+            <div className="flex items-center justify-center bg-black  rounded-lg p-1">
+              <h3
+                onClick={() => openInNewTab(item.gitUrl)}
+                className="flex gap-2 items-center text-white uppercase font-mono text-center text-sm font-medium"
+              >
+                <p>View on Github</p> <ArrowTopRightOnSquareIcon className="h-6 w-6" aria-hidden="true" />
+              </h3>
+            </div>
+          </div>
+          <div className="flex justify-between item-center py-1">
             <div className="flex gap-4">
-              <h3 className="text-red text-22xl font-medium">{item._githubMeta?.stargazers_count}</h3>
-              <div className="flex">
-                <StarIcon className="h-5 w-5 text-gold" />
-                <StarIcon className="h-5 w-5 text-gold" />
-                <StarIcon className="h-5 w-5 text-gold" />
-                <StarIcon className="h-5 w-5 text-gold" />
-                <StarIcon className="h-5 w-5 text-gold" />
-              </div>
+              <StarIcon className="h-5 w-5 text-gold" />
+              <h3 className="text-red text-22xl font-medium font-mono">{item._githubMeta?.stargazers_count}</h3> Stars
             </div>
             <div>
-              <h3 className="text-3xl font-medium">${item.usdcBalance}</h3>
+              <h3 className="text-3xl font-medium font-mono">${item.usdcBalance}</h3>
             </div>
           </div>
           <h5>Forks: {item?._githubMeta?.forks_count}</h5>
-          <h3>Last Updated At: {item?._githubMeta?.pushed_at}</h3>
+          <h3 className="">Last Updated At: {item?._githubMeta?.pushed_at}</h3>
           <Code>{item?._githubMeta?.owner?.login}</Code> <br />
-          <Code>{item?._githubMeta?.visibility}</Code>
+
           <hr style={{ color: '#C4C4C4' }} />
-          <div className="flex justify-between pt-6 w-full max-w-7xl">
-            <Button
-              onClick={() => openInNewTab(item.gitUrl)}
-              backgroundColor={'black'}
-              color={'white'}
-              width={'inherit'}
-              rightIcon={<ArrowTopRightOnSquareIcon className="h-6 w-6" aria-hidden="true" />}
-            >
-              View on Github
-            </Button>
-          </div>
           <div className="flex justify-between pt-6 w-full max-w-7xl">
             <Button
               onClick={() => handleSelectProject(item)}
               leftIcon={<CurrencyDollarIcon className="h-6 w-6" aria-hidden="true" />}
-              colorScheme="pink"
+              colorScheme="gray"
               variant="solid"
               width={'inherit'}
             >
-              Donate USDC
+              Donate
             </Button>
           </div>
           {isOpen && <DonateModal item={selectedProject} onClose={onClose} isOpen={isOpen} index={index} />}

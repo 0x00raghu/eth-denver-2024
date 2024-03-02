@@ -33,13 +33,13 @@ const Project = () => {
     <>
       <div className="mx-auto max-w-7xl sm:py-8 px-4 lg:px-8 ">
         <div className="sm:flex justify-between items-center">
-          <h3 className="text-midnightblue text-4xl lg:text-55xl font-semibold mb-5 sm:mb-0">Popular projects.</h3>
-          <Link href={'/list-project'} className="text-Blueviolet text-lg font-medium space-links">
+          <h3 className="text-midnightblue text-4xl lg:text-55xl font-semibold mb-5 sm:mb-0">Discover projects</h3>
+          <Link href={'/list-project'} className="text-blue-500 text-lg font-medium space-links font-mono">
             List Your Project&nbsp;&gt;&nbsp;
           </Link>
         </div>
 
-        <div className="grid grid-cols-3 justify-center w-full">
+        <div className="grid grid-cols-2 justify-center w-full">
           {projects &&
             projects.map((item: any, i: any) => {
               return (
