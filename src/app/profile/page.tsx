@@ -2,13 +2,13 @@
 import Image from 'next/image';
 import { useWallet } from '@/context/_aa/WalletContext';
 import DynamicReactTable from '@/utils/table';
-import { getProjectFundInUSD, withdrawUSDC, withdrawEth, getBalance } from '@/context/_aa/ContractFunctions'; // Import the additional contract functions
+import { getProjectFundInUSD, withdrawUSDC, withdrawEth } from '@/context/_aa/ContractFunctions'; // Import the additional contract functions
 import { ArrowDownIcon } from '@heroicons/react/24/solid';
 import { openTransak } from '@/components/_onramp/transak';
 import { useEffect } from 'react';
 
 const Home = () => {
-  const { address, sendUserOperation, tokenBalances, getWalletBalances, provider } = useWallet();
+  const { address, sendUserOperation, tokenBalances, getWalletBalances, selectedChain } = useWallet();
 
   const handleGetBalances = async () => {
     const balances = await getWalletBalances();
@@ -22,24 +22,18 @@ const Home = () => {
 
   // Function to handle withdrawing USDC
   const handleWithdrawUSDC = async () => {
-    const { uo }: any = await withdrawUSDC(1, 0);
+    const { uo }: any = await withdrawUSDC(1, 0, selectedChain.chain.network);
     await sendUserOperation(uo);
   };
 
   // Function to handle withdrawing Ethereum
   const handleWithdrawEth = async () => {
-    const { uo }: any = await withdrawEth(0);
-    await sendUserOperation(uo);
-  };
-
-  // Function to handle getting balance
-  const handleGetBalance = async () => {
-    const { uo }: any = await getBalance();
+    const { uo }: any = await withdrawEth(0, selectedChain.chain.network);
     await sendUserOperation(uo);
   };
 
   const handleGetBalanceLiveFeed = async () => {
-    const { ethBalance, usdcBalance } = await getProjectFundInUSD(0);
+    const { ethBalance, usdcBalance } = await getProjectFundInUSD(0, selectedChain.chain.network);
     console.log(ethBalance, usdcBalance);
   };
 
@@ -59,13 +53,6 @@ const Home = () => {
             className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
           >
             Withdraw Eth
-          </button>
-
-          <button
-            onClick={handleGetBalance}
-            className="flex border w-full md:w-auto mt-5 md:mt-0 border-pink justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-pink hover:text-white hover:bg-pink"
-          >
-            Get Balance
           </button>
 
           <button
